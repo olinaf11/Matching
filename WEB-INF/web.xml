@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app>
+<web-app>
+	
+	<servlet>
+		<servlet-name>Check</servlet-name>
+		<servlet-class>CheckLogin</servlet-class>	
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Check</servlet-name>
+		<url-pattern>/login</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Session</servlet-name>
+		<servlet-class>CheckSession</servlet-class>	
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Session</servlet-name>
+		<url-pattern>/index</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Insert</servlet-name>
+		<servlet-class>InsertInfo</servlet-class>	
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Insert</servlet-name>
+		<url-pattern>/insert</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>InsertCritere</servlet-name>
+		<servlet-class>InsertCritere</servlet-class>	
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>InsertCritere</servlet-name>
+		<url-pattern>/insert-critere</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Proposition</servlet-name>
+		<servlet-class>Liste</servlet-class>	
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Proposition</servlet-name>
+		<url-pattern>/liste</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Deco</servlet-name>
+		<servlet-class>Deconnexion</servlet-class>	
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Deco</servlet-name>
+		<url-pattern>/deconnexion</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Inscription</servlet-name>
+		<servlet-class>Inscription</servlet-class>	
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Inscription</servlet-name>
+		<url-pattern>/inscription</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Critere</servlet-name>
+		<servlet-class>ListCritere</servlet-class>	
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Critere</servlet-name>
+		<url-pattern>/critere</url-pattern>
+	</servlet-mapping>
+
+</web-app>

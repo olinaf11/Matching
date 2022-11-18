@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/bootstrap.css">
+    <title>Information</title>
+</head>
+<body>
+    <div class="container w-50" style="margin-top: 90px;">
+        <h2 class="text-center mb-5">Vos Informations</h2>
+        <form action="insert" method="post">
+            <div class="mt-3">
+                <label for="fivavahana" class="form-label">Fivavahana</label>
+                <select class="form-select" aria-label="Default select example" id="fivavahana" name="Fivavahana">
+                    <option value="Oui">Oui</option>
+                    <option value="Non">Non</option>
+                </select>
+            </div>
+            <div class="mt-3">
+                <label for="physique" class="form-label">Longueur (metre)</label>
+                <input type="text" class="form-control" name="Longueur" id="physique">
+            </div>
+            <div class="mt-3">
+                <label for="salaire" class="form-label">Salaire par mois</label>
+                <input type="text" class="form-control" name="Salaire par mois" id="salaire">
+            </div>
+            <div class="mt-3">
+                <label for="Diplome" class="form-label">Diplome</label>
+                <select class="form-select" aria-label="Default select example" id="Diplome" name="Diplome">
+                    <option value="Bacc+1">Bacc+1</option>
+                    <option value="Bacc+2">Bacc+2</option>
+                    <option value="Bacc+3">Bacc+3</option>
+                    <option value="Bacc+4">Bacc+4</option>
+                    <option value="Bacc+5">Bacc+5</option>
+                    <option value="Bacc+6">Bacc+6</option>
+                    <option value="Bacc+7">Bacc+7</option>
+                    <option value="Bacc+8">Bacc+8</option>
+                </select>
+            </div>
+            <div class="mt-3">
+                <label for="nationalite" class="form-label">Nationalite</label>
+                <select class="form-select" aria-label="Default select example" id="nationalite" name="Nationalite">
+                    <option value="Malagasy">Malagasy</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="row mt-4">
+                <input type="submit" value="OK" class="btn btn-primary mt-3">
+            </div>
+            <div class="row mt-4">
+                <a href="index" class="btn btn-primary">Back to Login</a>
+            </div>
+        </form>
+    </div>
+</body>
+<script src="./assets/js/bootstrap.min.js"></script>
+<script src="./assets/js/jquery.min.js"></script>
+</html>

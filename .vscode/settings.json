@@ -1,0 +1,9 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/Users/tendrynyavo/Documents/ITUniversity/Programmation/apache-tomcat-10.0.20/lib/servlet-api.jar",
+        "/Users/tendrynyavo/postgresql-42.5.0.jar",
+        "/Users/tendrynyavo/gson-2.10.jar",
+        "/Users/tendrynyavo/cos-22/lib/cos.jar"
+    ]
+}
