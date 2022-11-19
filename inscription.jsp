@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="formulaire.Formulaire" %>
 <%@ page import="user.User" %>
 <%
@@ -26,7 +27,6 @@
             <a href="index" class="btn btn-primary">Back to Login</a>
         </div>
     </div>
-    
 </body>
 <script src="./assets/js/bootstrap.min.js"></script>
 <script src="./assets/js/jquery.min.js"></script>
