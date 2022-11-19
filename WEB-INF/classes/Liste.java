@@ -16,7 +16,8 @@ public class Liste extends HttpServlet {
             RequestDispatcher dispat = request.getRequestDispatcher("liste.jsp");
             dispat.forward(request, response);
         } catch (Exception e) {
-            response.sendRedirect("error.jsp?error="+e.getMessage());
+            PrintWriter out = response.getWriter();
+            out.println(e.getMessage());
         }
     }
 }

@@ -60,7 +60,9 @@ public class Critere extends BddObject {
     }
 
     public void setAnnexe() throws Exception {
-        this.setAnnexe(Annexe.convert(this.getData(getPostgreSQL(), null, "idannexe"))[0]);
+        Annexe axe = new Annexe();
+        axe.setIdAnnexe(idAnnexe);
+        this.setAnnexe(Annexe.convert(axe.getData(getPostgreSQL(), null, "idAnnexe"))[0]);
     }
 
     public Critere(String idAnnexe, String idUser, int coefficient) throws Exception {

@@ -17,7 +17,6 @@
     <title>Liste</title>
 </head>
 <body>
-
     <div class="d-flex flex-column flex-shrink-0 p-3 bg-light fixed-top float-start shadow rounded mt-3 ms-3" style="width: 280px; height: -webkit-fill-available;">
         <h2 class="nav nav-pills flex-column mb-auto border-bottom p-3">
           <% out.print(user.getNom()); %>
@@ -25,7 +24,8 @@
         <h5>Vos preferences : </h5>
         <ul>
         <%for (Critere critere : criteres) { 
-          critere.setAnnexe(); %>
+          critere.setAnnexe();
+        %>
           <li><% out.print(critere.getAnnexe().getNom()); %> : <% out.print(critere.getCoefficient()); %></li>
         <% } %>
         </ul>
