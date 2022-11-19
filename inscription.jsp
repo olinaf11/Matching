@@ -26,6 +26,7 @@
             <a href="index" class="btn btn-primary">Back to Login</a>
         </div>
     </div>
+    
 </body>
 <script src="./assets/js/bootstrap.min.js"></script>
 <script src="./assets/js/jquery.min.js"></script>
