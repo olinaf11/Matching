@@ -112,7 +112,6 @@ public abstract class BddObject {
 
     public Object[] convertToObject(ResultSet result, int attribut) throws Exception {
         Field[] attributs = this.getClass().getDeclaredFields();
-        Vector<Object> objects = new Vector<Object>();
         while (result.next()) {
             Object object = this.getClass().getConstructor().newInstance();
             for (int i = 0; i < attribut; i++) {
