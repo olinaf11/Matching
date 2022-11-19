@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="user.User" %>
 <%@ page import="info.Critere" %>
 <%@ page import="info.Information" %>
@@ -44,7 +45,7 @@
         <tr>
           <th>Nom</th>
           <th>Fivavahana</th>
-          <th>Longueur (metre)</th>
+          <th>Longueur (cm)</th>
           <th>Salaire par mois</th>
           <th>Diplome</th>
           <th>Nationalite</th>
