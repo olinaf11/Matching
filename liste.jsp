@@ -23,7 +23,7 @@
           <% out.print(user.getNom()); %>
         </h2>
         <a href="liste-match" class="btn btn-primary mb-3">Liste des matchs</a>
-        <h5>Vos preferences : </h5>
+        <h5>Vos préférences : </h5>
         <ul>
         <%for (Critere critere : criteres) { 
           critere.setAnnexe();
