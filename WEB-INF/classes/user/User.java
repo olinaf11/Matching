@@ -95,12 +95,8 @@ public class User extends BddObject {
     }
 
     public void setCritereInfos() throws Exception {
-        Critere critere = new Critere();
-        critere.setIdUser(idUser);
-        Information info = new Information();
-        info.setIdUser(idUser);
-        this.setCriteres(Critere.convert(critere.getData(getPostgreSQL(), "idannexe", "idUser")));
-        this.setInfos(Information.convert(info.getData(getPostgreSQL(), "idannexe", "idUser")));
+        this.setCriteres(Critere.convert(new Critere(idUser).getData(getPostgreSQL(), "idAnnexe", "idUser")));
+        this.setInfos(Information.convert(new Information(idUser).getData(getPostgreSQL(), "idAnnexe", "idUser")));
     }
 
     public static User[] convert(Object[] objects) {

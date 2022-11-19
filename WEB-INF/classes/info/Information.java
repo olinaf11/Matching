@@ -63,6 +63,11 @@ public class Information extends BddObject {
         this.setFunctionPK("getSeqInformation()");
     }
 
+    public Information(String idUser) {
+        this();
+        setIdUser(idUser);
+    }
+
     public Information(String idAnnexe, String idUser, double note, String value) throws Exception {
         this();
         this.setIdInfo(buildPrimaryKey(getPostgreSQL()));

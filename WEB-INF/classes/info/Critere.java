@@ -44,12 +44,17 @@ public class Critere extends BddObject {
     }
 
     public void setCoefficient(int coefficient) throws Exception {
-        if (coefficient > 10 || coefficient < 0) throw new Exception("Valeur must be >= 10");
+        if (coefficient > 10 || coefficient < -10) throw new Exception("Valeur must be >= 10");
         this.coefficient = coefficient;
     }
 
     public void setIdUser(String idUser) {
         this.idUser = idUser;
+    }
+
+    public Critere(String idUser) {
+        this();
+        this.setIdUser(idUser);
     }
 
     public Critere() {
