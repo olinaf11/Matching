@@ -1,10 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="match.Match" %>
 <%@ page import="user.User" %>
 <%@ page import="info.Critere" %>
 <%@ page import="info.Information" %>
 <%@ page import="java.util.List" %>
 <%
-  User[] propositions = (User[]) request.getAttribute("proposition");
+  Match[] matchs = (Match[]) request.getAttribute("matchs");
   User user = (User) request.getAttribute("user");
   Critere[] criteres = user.getCriteres();
 %>
@@ -22,7 +23,7 @@
         <h2 class="nav nav-pills flex-column mb-auto border-bottom p-3">
           <% out.print(user.getNom()); %>
         </h2>
-        <a href="liste-match" class="btn btn-primary mb-3">Liste des matchs</a>
+        <a href="liste" class="btn btn-primary mb-3">Propositions</a>
         <h5>Vos preferences : </h5>
         <ul>
         <%for (Critere critere : criteres) { 
@@ -51,14 +52,18 @@
           <th>Diplome</th>
           <th>Nationalite</th>
         </tr>
-        <% for (int i = 0; i < propositions.length; i++) { %>
+        <% for (int i = 0; i < matchs.length; i++) { 
+            matchs[i].setTable("users"); 
+            matchs[i].setUser();
+        %>
         <tr>
-          <td><% out.print(propositions[i].getNom()); %></td>
-          <% Information[] infos = propositions[i].getInfos();
+          <td><% out.print(matchs[i].getUser().getNom()); %></td>
+          <% matchs[i].getUser().setCritereInfos();
+          Information[] infos = matchs[i].getUser().getInfos();
           for (int j = 0; j < infos.length; j++) { %>
             <td><% out.print(infos[j].getValeur()); %></td>
           <% } %>
-          <td><a href="insert-match?idUser=<% out.print(propositions[i].getIdUser()); %>" class="btn btn-primary">Match</a></td>
+          <td><a href="insert-raikitra?idUser=<% out.print(matchs[i].getUser().getIdUser()); %>&&idMatch=<% out.print(matchs[i].getIdMatch()); %>" class="btn btn-primary">OK</a></td>
         </tr>
         <% } %>
       </table>

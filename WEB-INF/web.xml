@@ -82,4 +82,34 @@
 		<url-pattern>/critere</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>InsertMatch</servlet-name>
+		<servlet-class>InsertMatch</servlet-class>	
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>InsertMatch</servlet-name>
+		<url-pattern>/insert-match</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ListMatch</servlet-name>
+		<servlet-class>ListMatch</servlet-class>	
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ListMatch</servlet-name>
+		<url-pattern>/liste-match</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>InsertRaikitra</servlet-name>
+		<servlet-class>InsertRaikitra</servlet-class>	
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>InsertRaikitra</servlet-name>
+		<url-pattern>/insert-raikitra</url-pattern>
+	</servlet-mapping>
+
 </web-app>

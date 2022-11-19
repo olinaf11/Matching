@@ -136,3 +136,57 @@ SELECT iduserb FROM raikitra UNION SELECT iduserv FROM raikitra UNION SELECT idu
 SELECT * FROM Users WHERE iduser NOT IN (SELECT iduserb FROM raikitra UNION SELECT iduserv FROM raikitra UNION SELECT iduser FROM indisponible);
 CREATE VIEW users_disponible AS
 SELECT * FROM Users WHERE iduser NOT IN (SELECT iduserb FROM raikitra UNION SELECT iduserv FROM raikitra UNION SELECT iduser FROM indisponible);
+
+CREATE TABLE Match (
+    idMatch VARCHAR PRIMARY KEY,
+    idUser VARCHAR REFERENCES Users (idUser),
+    idUserMatch VARCHAR REFERENCES Users (idUser),
+    dateMatch DATE
+);
+
+CREATE SEQUENCE seq_match
+INCREMENT 1
+MINVALUE 1;
+
+CREATE OR REPLACE FUNCTION getSeqMatch()
+    RETURNS integer AS $match$
+    declare match integer;
+BEGIN
+    SELECT nextval('seq_match') INTO match FROM DUAL;
+    RETURN match;
+END;
+$match$ LANGUAGE plpgsql;
+ALTER TABLE Raikitra
+ADD COLUMN idMatch VARCHAR;
+CREATE VIEW match_dispo AS (
+    SELECT *
+    FROM match WHERE idMatch NOT IN (
+    SELECT idMatch 
+    FROM Raikitra
+    )
+);
+
+SELECT *
+FROM match WHERE idMatch NOT IN (
+    SELECT idMatch 
+    FROM Raikitra
+);
+
+CREATE SEQUENCE seq_raikitra
+INCREMENT 1
+MINVALUE 1;
+
+CREATE OR REPLACE FUNCTION getSeqMatch()
+    RETURNS integer AS $match$
+    declare match integer;
+BEGIN
+    SELECT nextval('seq_match') INTO match FROM DUAL;
+    RETURN match;
+END;
+$match$ LANGUAGE plpgsql;
+
+ALTER TABLE raikitra ALTER COLUMN idRaikitra TYPE VARCHAR;
+ALTER TABLE raikitra 
+RENAME COLUMN iduserb TO iduser1;
+ALTER TABLE raikitra 
+RENAME COLUMN iduserv TO iduser2;
