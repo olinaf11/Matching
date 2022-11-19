@@ -6,6 +6,7 @@ import agregation.Liste;
 import connection.BddObject;
 import info.Critere;
 import info.Information;
+import match.Match;
 
 public class User extends BddObject {
 
@@ -146,5 +147,21 @@ public class User extends BddObject {
         User[] results = convert(match);
         Liste.sort(results, "getNote", "DESC");
         return results;
+    }
+
+    public boolean checkMatch(User user) throws Exception {
+        Match match = new Match();
+        match.setIdUser(this.getIdUser());
+        match.setIdUserMatch(user.getIdUser());
+        Match[] matchs = Match.convert(match.getData(getPostgreSQL(), null, "idUserMatch", "idUser"));
+        return (matchs.length > 0);
+    }
+
+    public Match checkInvited(User user) throws Exception {
+        Match match = new Match();
+        match.setIdUser(user.getIdUser());
+        match.setIdUserMatch(this.getIdUser());
+        Match[] matchs = Match.convert(match.getData(getPostgreSQL(), null, "idUserMatch", "idUser"));
+        return (matchs.length > 0) ? matchs[0] : null;
     }
 }

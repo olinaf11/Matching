@@ -58,7 +58,15 @@
           for (int j = 0; j < infos.length; j++) { %>
             <td><% out.print(infos[j].getValeur()); %></td>
           <% } %>
-          <td><a href="insert-match?idUser=<% out.print(propositions[i].getIdUser()); %>" class="btn btn-primary">Match</a></td>
+          <td>
+          <% if (user.checkMatch(propositions[i])) { %>
+            <div class="btn btn-outline-warning">Déja intéressé</div>
+          <% } else if (user.checkInvited(propositions[i]) != null) { %>
+            <a href="insert-raikitra?idUser=<% out.print(propositions[i].getIdUser()); %>&&idMatch=<% out.print(user.checkInvited(propositions[i]).getIdMatch()); %>" class="btn btn-primary">OK</a>
+          <% } else { %>
+            <a href="insert-match?idUser=<% out.print(propositions[i].getIdUser()); %>" class="btn btn-primary">Match</a>
+          <% } %>
+          </td>
         </tr>
         <% } %>
       </table>
