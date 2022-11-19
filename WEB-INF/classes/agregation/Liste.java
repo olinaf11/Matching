@@ -38,7 +38,7 @@ public class Liste {
 
     public static void sort(Object[] objects, String function, String order) throws Exception {
         boolean check;
-        for (int i=0; i<objects.length-1; i++) {
+        for (int i = 0; i < objects.length - 1; i++) {
             int index = i;  
             for (int j = i + 1; j < objects.length; j++) {
                 check=(order == "DESC") ? (double) objects[i].getClass().getMethod(function).invoke(objects[j]) > (double) objects[i].getClass().getMethod(function).invoke(objects[index]) 
