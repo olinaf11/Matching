@@ -1,7 +1,4 @@
-import jakarta.servlet.http.HttpServlet;
 import java.io.*;
-import java.sql.Connection;
-import connection.BddObject;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import raikitra.Raikitra;
@@ -16,11 +13,8 @@ public class InsertRaikitra extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("id");
         try {
-            Connection connection = BddObject.getPostgreSQL();
             Raikitra raikitra = new Raikitra(user.getIdUser(), idUser, idMatch);
-            raikitra.insert(connection);
-            connection.commit();
-            connection.close();
+            raikitra.insert(null);
             response.sendRedirect("liste-match");
         } catch (Exception e) {
             PrintWriter out = response.getWriter();

@@ -1,8 +1,5 @@
 import java.io.*;
-import java.sql.Connection;
 import java.sql.Date;
-
-import connection.BddObject;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import match.Match;
@@ -16,11 +13,8 @@ public class InsertMatch extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("id");
         try {
-            Connection connection = BddObject.getPostgreSQL();
             Match match = new Match(user.getIdUser(), idUser, new Date(System.currentTimeMillis()));
-            match.insert(connection);
-            connection.commit();
-            connection.close();
+            match.insert(null);
             response.sendRedirect("liste");
         } catch (Exception e) {
             PrintWriter out = response.getWriter();

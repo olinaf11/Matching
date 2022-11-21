@@ -190,3 +190,8 @@ ALTER TABLE raikitra
 RENAME COLUMN iduserb TO iduser1;
 ALTER TABLE raikitra 
 RENAME COLUMN iduserv TO iduser2;
+SELECT * FROM Users WHERE idUser NOT IN (
+    SELECT idUser1 FROM raikitra
+    UNION 
+    SELECT idUser2 FROM raikitra
+);

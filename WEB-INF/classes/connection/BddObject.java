@@ -144,7 +144,7 @@ public abstract class BddObject {
      */
     public void insert(Connection connection) throws Exception {
         boolean connect = false;
-        if (connection == null) {connection = getOracle(); connect = true;}
+        if (connection == null) {connection = getPostgreSQL(); connect = true;}
         String[] liste = listColumn("SELECT * FROM " + this.getTable(), connection);
         Statement statement = connection.createStatement();
         String sql = "INSERT INTO " + this.getTable() + " " + createColumn(liste) + " VALUES ("; // Insert with all column
@@ -177,7 +177,7 @@ public abstract class BddObject {
     public void update(String[] column, Object[] value, String ID, Connection connection) throws Exception {
         if (value.length != column.length) throw new Exception("Value and column must be equals");
         boolean connect = false;
-        if (connection == null) {connection = getOracle(); connect = true;}
+        if (connection == null) {connection = getPostgreSQL(); connect = true;}
         String colonne = getColonneID(connection);
         // historiser(ID, connection);
         Statement statement = connection.createStatement();
