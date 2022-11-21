@@ -40,15 +40,23 @@ public class Match extends BddObject {
         this.dateMatch = dateMatch;
     }
 
-    public void setIdMatch(String idMatch) {
+    public void setIdMatch(String idMatch) throws Exception {
+        if (!idMatch.contains(this.getPrefix()) || idMatch.length() != this.getCountPK()) 
+            throw new Exception("idMatch is invalid");
         this.idMatch = idMatch;
     }
 
-    public void setIdUser(String idUser) {
+    public void setIdUser(String idUser) throws Exception {
+        User user = new User();
+        if (!idUser.contains(user.getPrefix()) || idUser.length() != user.getCountPK()) 
+            throw new Exception("idUser is invalid");
         this.idUser = idUser;
     }
 
-    public void setIdUserMatch(String idUserMatch) {
+    public void setIdUserMatch(String idUserMatch) throws Exception {
+        User user = new User();
+        if (!idUserMatch.contains(user.getPrefix()) || idUserMatch.length() != user.getCountPK()) 
+            throw new Exception("idUser is invalid");
         this.idUserMatch = idUserMatch;
     }
 
@@ -59,7 +67,8 @@ public class Match extends BddObject {
         this.setUser(User.convert(user.getData(getPostgreSQL(), null, "idUser"))[0]);
     }
 
-    public Match() {
+    public Match() throws Exception {
+        super("match_dispo", getPostgreSQL());
         this.setCountPK(7);
         this.setTable("match_dispo");
         this.setPrefix("MAT");

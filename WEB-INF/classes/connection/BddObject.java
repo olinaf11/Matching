@@ -66,6 +66,23 @@ public abstract class BddObject {
         return connection;
     }
 
+    public BddObject(String table, Connection connection) throws Exception {
+        if (checkArgument(table, connection)) throw new Exception("Argument not coherent");
+    }
+
+    public boolean checkArgument(String table, Connection connection) throws Exception {
+        Field[] fields = this.getClass().getDeclaredFields();
+        String[] columns = listColumn("SELECT * FROM " + table, connection);
+        if (fields.length < columns.length) throw new Exception("Fields is less than columns");
+        for (int i = 0; i < columns.length; i++) {
+            if (!fields[i].getName().toUpperCase().equals(columns[i].toUpperCase()))
+                return true;
+        }
+        this.setTable(table);
+        connection.close();
+        return false;
+    }
+
     /**
      * <p>Get list of column name in query<p>
      * @param query : {@code SELECT} query
@@ -178,14 +195,13 @@ public abstract class BddObject {
         if (value.length != column.length) throw new Exception("Value and column must be equals");
         boolean connect = false;
         if (connection == null) {connection = getPostgreSQL(); connect = true;}
-        String colonne = getColonneID(connection);
-        // historiser(ID, connection);
+        historiser(ID, connection);
         Statement statement = connection.createStatement();
         String sql = "UPDATE " + this.getTable() + " \nSET ";
         for (int i = 0; i < column.length; i++)
             sql += column[i] + " = " + convertToLegal(value[i]) + ",\n";
         sql = sql.substring(0, sql.length() - 2);
-        sql += " WHERE " + colonne + " = " + convertToLegal(this.getClass().getMethod("get" + toUpperCaseFisrtLetter(ID)).invoke(this));
+        sql += " WHERE " + ID + " = " + convertToLegal(this.getClass().getMethod("get" + toUpperCaseFisrtLetter(ID)).invoke(this));
         statement.executeUpdate(sql);
         statement.close();
         if (connect) {connection.commit(); connection.close();}
@@ -239,8 +255,7 @@ public abstract class BddObject {
         boolean connect = false;
         if (connection == null) {connection = getOracle(); connect = true;}
         Statement statement = connection.createStatement();
-        String colonne = getColonneID(connection);
-        String sql = "SELECT * FROM " + this.getTable() + " WHERE " + colonne + " = " + convertToLegal(this.getClass().getMethod("get" + toUpperCaseFisrtLetter(ID)).invoke(this));
+        String sql = "SELECT * FROM " + this.getTable() + " WHERE " + ID + " = " + convertToLegal(this.getClass().getMethod("get" + toUpperCaseFisrtLetter(ID)).invoke(this));
         ResultSet result = statement.executeQuery(sql);
         while (result.next()) {
             Historique historique = new Historique(this.getTable(), "update", new Date(System.currentTimeMillis()), getValue(result, listColumn(sql, connection).length));

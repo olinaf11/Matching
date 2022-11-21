@@ -1,15 +1,16 @@
 package main;
 
+import info.Critere;
 import user.User;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        User lynda = new User();
-        lynda.setIdUser("USR0017");
-        lynda.setGenre("feminin");
-        User[] users = lynda.getProposition();
-        for (User user : users) {
-            System.out.println(user.getNom());
+        try {
+            Critere critere = new Critere();
+            critere.setIdAnnexe("A020");
+            critere.setAnnexe();
+        } catch (Exception e) {
+            System.out.println(e.getCause().getMessage());
         }
     }
 }

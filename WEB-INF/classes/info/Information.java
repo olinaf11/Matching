@@ -1,6 +1,8 @@
 package info;
 
+import annexe.Annexe;
 import connection.BddObject;
+import user.User;
 
 public class Information extends BddObject {
     
@@ -10,16 +12,42 @@ public class Information extends BddObject {
     double note;
     String valeur;
 
-    public void setIdInfo(String idInfo) {
+    public void setIdInfo(String idInfo) throws Exception {
+        if (!idInfo.contains(this.getPrefix()) || idInfo.length() != this.getCountPK()) 
+            throw new Exception("IdAnnexe is invalid");
         this.idInfo = idInfo;
     }
-
-    public String getIdInfo() {
-        return idInfo;
-    }
-
+    
     public void setValeur(String valeur) {
         this.valeur = valeur;
+    }
+
+    public void setIdAnnexe(String idAnnexe) throws Exception {
+        Annexe annexe = new Annexe();
+        if (!idAnnexe.contains(annexe.getPrefix()) || idAnnexe.length() != annexe.getCountPK()) 
+            throw new Exception("IdAnnexe is invalid");
+        this.idAnnexe = idAnnexe;
+    }
+    
+    public void setIdUser(String idUser) throws Exception {
+        User user = new User();
+        if (!idUser.contains(user.getPrefix()) || idUser.length() != user.getCountPK()) 
+            throw new Exception("idUser is invalid");
+        this.idUser = idUser;
+    }
+
+    public void setNote(double value) throws Exception {
+        if (value < 0) {
+            throw new Exception("Value must be positive value");
+        } else if (value > 20) {
+            this.note = 20;
+        } else {
+            this.note = value;
+        }
+    }
+    
+    public String getIdInfo() {
+        return idInfo;
     }
 
     public String getValeur() {
@@ -38,32 +66,15 @@ public class Information extends BddObject {
         return note;
     }
 
-    public void setIdAnnexe(String idAnnexe) {
-        this.idAnnexe = idAnnexe;
-    }
-    
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
-    }
-
-    public void setNote(double value) throws Exception {
-        if (value < 0) {
-            throw new Exception("Value must be positive value");
-        } else if (value > 20) {
-            this.note = 20;
-        } else {
-            this.note = value;
-        }
-    }
-
-    public Information() {
+    public Information() throws Exception {
+        super("Informations", getPostgreSQL());
         this.setCountPK(7);
         this.setTable("Informations");
         this.setPrefix("INF");
         this.setFunctionPK("getSeqInformation()");
     }
 
-    public Information(String idUser) {
+    public Information(String idUser) throws Exception {
         this();
         setIdUser(idUser);
     }

@@ -3,6 +3,7 @@ package user;
 import java.util.ArrayList;
 import java.util.List;
 import agregation.Liste;
+import annexe.Annexe;
 import connection.BddObject;
 import info.Critere;
 import info.Information;
@@ -18,18 +19,11 @@ public class User extends BddObject {
     Information[] infos;
     double note;
 
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
     public String getGenre() {
         return genre;
     }
 
-    public void setNote(double note) {
-        this.note = note;
-    }
-
+    
     public double getNote() {
         return note;
     }
@@ -37,28 +31,43 @@ public class User extends BddObject {
     public String getIdUser() {
         return idUser;
     }
-
+    
     public String getNom() {
         return nom;
     }
-
+    
     public String getPassword() {
         return password;
     }
-
+    
     public Critere[] getCriteres() {
         return criteres;
     }
-
+    
     public Information[] getInfos() {
         return infos;
     }
 
-    public void setIdUser(String id) {
+    public void setGenre(String genre) throws Exception {
+        if (genre.equals("masculin") || genre.equals("feminin"))
+            this.genre = genre;
+        else throw new Exception("Genre is not found");
+    }
+    
+    public void setNote(double note) throws Exception {
+        if (note > 20 || note < 0) throw new Exception("Note invalid");
+        this.note = note;
+    }
+    
+    public void setIdUser(String id) throws Exception {
+        if (!id.contains(this.getPrefix()) || id.length() != this.getCountPK()) 
+            throw new Exception("idUser is invalid");
         this.idUser = id;
     }
 
-    public void setNom(String name) {
+    public void setNom(String name) throws Exception {
+        if (!Annexe.isAlpha(name))
+            throw new Exception("Name is invalid");
         this.nom = name;
     }
 
@@ -74,7 +83,8 @@ public class User extends BddObject {
         this.infos = infos;
     }
 
-    public User() {
+    public User() throws Exception {
+        super("users", getPostgreSQL());
         this.setCountPK(7);
         this.setTable("users");
         this.setPrefix("USR");

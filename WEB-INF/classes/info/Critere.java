@@ -2,6 +2,7 @@ package info;
 
 import annexe.Annexe;
 import connection.BddObject;
+import user.User;
 
 public class Critere extends BddObject {
 
@@ -35,38 +36,47 @@ public class Critere extends BddObject {
         return idUser;
     }
 
-    public void setIdCritere(String id) {
+    public void setIdCritere(String id) throws Exception {
+        if (!id.contains(this.getPrefix()) || id.length() != this.getCountPK()) 
+            throw new Exception("IdCritere is invalid");
         this.idCritere = id;
     }
 
-    public void setIdAnnexe(String idAnnexe) {
+    public void setIdAnnexe(String idAnnexe) throws Exception {
+        Annexe annexe = new Annexe();
+        if (!idAnnexe.contains(annexe.getPrefix()) || idAnnexe.length() != annexe.getCountPK()) 
+            throw new Exception("IdAnnexe is invalid");
         this.idAnnexe = idAnnexe;
     }
 
     public void setCoefficient(int coefficient) throws Exception {
-        if (coefficient > 10 || coefficient < -10) throw new Exception("Valeur must be >= 10");
+        if (coefficient > 10 || coefficient < -10) 
+            throw new Exception("Valeur must be in [-10, 10]");
         this.coefficient = coefficient;
     }
 
-    public void setIdUser(String idUser) {
+    public void setIdUser(String idUser) throws Exception {
+        User user = new User();
+        if (!idUser.contains(user.getPrefix()) || idUser.length() != user.getCountPK()) 
+            throw new Exception("idUser is invalid");
         this.idUser = idUser;
     }
 
-    public Critere(String idUser) {
+    public Critere(String idUser) throws Exception {
         this();
         this.setIdUser(idUser);
     }
 
-    public Critere() {
+    public Critere() throws Exception {
+        super("Criteres", getPostgreSQL());
         this.setCountPK(7);
-        this.setTable("Criteres");
         this.setPrefix("CRI");
         this.setFunctionPK("getSeqCritere()");
     }
 
     public void setAnnexe() throws Exception {
         Annexe axe = new Annexe();
-        axe.setIdAnnexe(idAnnexe);
+        axe.setIdAnnexe(this.idAnnexe);
         this.setAnnexe(Annexe.convert(axe.getData(getPostgreSQL(), null, "idAnnexe"))[0]);
     }
 

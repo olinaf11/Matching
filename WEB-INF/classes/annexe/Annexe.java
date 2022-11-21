@@ -7,11 +7,15 @@ public class Annexe extends BddObject {
     String idAnnexe;
     String nom;
 
-    public void setIdAnnexe(String idAnnexe) {
+    public void setIdAnnexe(String idAnnexe) throws Exception {
+        if (!idAnnexe.contains(this.getPrefix()) || idAnnexe.length() != this.getCountPK()) 
+            throw new Exception("IdAnnexe not invalid");
         this.idAnnexe = idAnnexe;
     }
 
-    public void setNom(String nom) {
+    public void setNom(String nom) throws Exception {
+        if (!isAlpha(nom)) 
+            throw new Exception("Nom est invalid pas de caractère spéciaux");
         this.nom = nom;
     }
 
@@ -23,9 +27,9 @@ public class Annexe extends BddObject {
         return nom;
     }
 
-    public Annexe() {
+    public Annexe() throws Exception {
+        super("Annexes", getPostgreSQL());
         this.setCountPK(4);
-        this.setTable("Users");
         this.setPrefix("A");
         this.setFunctionPK("getSeqAnnexe()");
         this.setTable("annexes");
@@ -42,5 +46,9 @@ public class Annexe extends BddObject {
         for (int i = 0; i < annexes.length; i++)
             annexes[i] = (Annexe) objects[i];
         return annexes;
+    }
+
+    public static boolean isAlpha(String s) {
+        return s != null && s.matches("^[a-zA-Z]*$");
     }
 }

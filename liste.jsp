@@ -25,10 +25,14 @@
         <a href="liste-match" class="btn btn-primary mb-3">Liste des matchs</a>
         <h5>Vos préférences : </h5>
         <ul>
-        <%for (Critere critere : criteres) { 
-          critere.setAnnexe();
+        <% for (Critere critere : criteres) { 
+          out.println(critere.getIdCritere());
+          out.println(critere.getIdAnnexe());
+          out.println(critere.getIdUser());
+          out.println(critere.getCoefficient());
+
         %>
-          <li><% out.print(critere.getAnnexe().getNom()); %> : <% out.print(critere.getCoefficient()); %></li>
+
         <% } %>
         </ul>
         <hr>
