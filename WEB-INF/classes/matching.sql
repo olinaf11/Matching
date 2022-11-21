@@ -248,3 +248,38 @@ LANGUAGE 'plpgsql';
 ALTER TABLE Indisponible ALTER COLUMN idIndispo TYPE VARCHAR;
 
 SELECT * FROM get_users_disponible('USR0001') AS f(idUser, nom, password, genre);
+SELECT *
+FROM informations
+WHERE idUser = 'USR0004';
+SELECT *
+FROM criteres
+WHERE idUser = 'USR0006';
+
+SELECT (note*coefficient) as note, c.coefficient
+FROM (
+    SELECT *
+    FROM informations
+    WHERE idUser = 'USR0004'
+) AS info JOIN (
+    SELECT *
+    FROM criteres
+    WHERE idUser = 'USR0006'
+) AS c ON info.idAnnexe = c.idAnnexe
+JOIN Annexes AS axe ON info.idAnnexe = axe.idAnnexe;
+
+SELECT SUM(note) / SUM(coefficient)
+FROM (
+    SELECT (note*coefficient) as note, c.coefficient
+    FROM (
+        SELECT *
+        FROM informations
+        WHERE idUser = 'USR0001'
+    ) AS info JOIN (
+        SELECT *
+        FROM criteres
+        WHERE idUser = 'USR0004'
+    ) AS c ON info.idAnnexe = c.idAnnexe
+    JOIN Annexes AS axe ON info.idAnnexe = axe.idAnnexe
+) AS note;
+SELECT SUM(note) / SUM(coefficient) FROM (SELECT (note*coefficient) as note, c.coefficient FROM (SELECT * FROM informations WHERE idUser = 'USR0004') AS info JOIN (SELECT * FROM criteres WHERE idUser = 'USR0006') AS c ON info.idAnnexe = c.idAnnexe JOIN Annexes AS axe ON info.idAnnexe = axe.idAnnexe) AS note;
+SELECT * FROM Criteres AS c JOIN Annexes AS a ON c.idAnnexe = a.idAnnexe; 

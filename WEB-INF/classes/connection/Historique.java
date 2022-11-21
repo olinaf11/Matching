@@ -41,7 +41,6 @@ public class Historique extends BddObject {
         this.valeur = valeur;
     }
     public Historique() throws Exception {
-        super("historique", getOracle());
         this.setTable("historique");
         this.setCountPK(7);
         this.setFunctionPK("getHistoseq()");

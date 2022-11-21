@@ -68,7 +68,6 @@ public class Match extends BddObject {
     }
 
     public Match() throws Exception {
-        super("match_dispo", getPostgreSQL());
         this.setCountPK(7);
         this.setTable("match_dispo");
         this.setPrefix("MAT");

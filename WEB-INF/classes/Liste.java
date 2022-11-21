@@ -22,7 +22,7 @@ public class Liste extends HttpServlet {
             out.println(e.getCause().getMessage());
         } catch (Exception e) {
             PrintWriter out = response.getWriter();
-            out.println(e);
+            out.println(e.getMessage());
         }
     }
 }

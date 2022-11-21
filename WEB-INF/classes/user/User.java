@@ -8,6 +8,7 @@ import connection.BddObject;
 import info.Critere;
 import info.Information;
 import match.Match;
+import note.Note;
 
 public class User extends BddObject {
 
@@ -22,7 +23,6 @@ public class User extends BddObject {
     public String getGenre() {
         return genre;
     }
-
     
     public double getNote() {
         return note;
@@ -41,6 +41,7 @@ public class User extends BddObject {
     }
     
     public Critere[] getCriteres() {
+        
         return criteres;
     }
     
@@ -84,9 +85,8 @@ public class User extends BddObject {
     }
 
     public User() throws Exception {
-        super("users", getPostgreSQL());
-        this.setCountPK(7);
         this.setTable("users");
+        this.setCountPK(7);
         this.setPrefix("USR");
         this.setFunctionPK("getsequser()");
     }
@@ -106,7 +106,7 @@ public class User extends BddObject {
     }
 
     public void setCritereInfos() throws Exception {
-        this.setCriteres(Critere.convert(new Critere(idUser).getData(getPostgreSQL(), "idAnnexe", "idUser")));
+        this.setCriteres(Critere.convert(new Critere(idUser).getData(getPostgreSQL(), null, "idUser")));
         this.setInfos(Information.convert(new Information(idUser).getData(getPostgreSQL(), "idAnnexe", "idUser")));
     }
 
@@ -127,16 +127,6 @@ public class User extends BddObject {
         return convert(this.getData(getPostgreSQL(), null, "iduser"));
     }
 
-    public double getNote(User user) throws Exception {
-        double somme = 0;
-        double coefficient = 0;
-        for (int i = 0; i < this.criteres.length; i++) {
-            somme += this.criteres[i].getCoefficient() * user.getInfos()[i].getNote();
-            coefficient += this.criteres[i].getCoefficient();
-        }
-        return somme / coefficient;
-    }
-
     public User[] convert(List<User> users) {
         User[] results = new User[users.size()]; 
         for (int i = 0; i < results.length; i++)
@@ -151,14 +141,21 @@ public class User extends BddObject {
         List<User> match = new ArrayList<User>();
         this.setCritereInfos();
         for (User user : users) {
-            user.setCritereInfos();
-            user.setNote(this.getNote(user));
-            if (user.getNote() >= 14 && user.getNote(this) >= 14 && !this.getIdUser().equals(user.getIdUser()) && !this.getGenre().equals(user.getGenre()))
+            user.setNote(this.getNote(user).getNote());
+            if (user.getNote() >= 14 && user.getNote(this).getNote() >= 14 && !this.getIdUser().equals(user.getIdUser()) && !this.getGenre().equals(user.getGenre())) {
+                user.setCritereInfos();
                 match.add(user);
+            }
         }
         User[] results = convert(match);
         Liste.sort(results, "getNote", "DESC");
         return results;
+    }
+
+    public Note getNote(User user) throws Exception {
+        String query = "SELECT SUM(note) / SUM(coefficient) FROM (SELECT (note*coefficient) as note, c.coefficient FROM (SELECT * FROM informations WHERE idUser = '" + user.getIdUser() + "') AS info JOIN (SELECT * FROM criteres WHERE idUser = '" + this.getIdUser() + "') AS c ON info.idAnnexe = c.idAnnexe JOIN Annexes AS axe ON info.idAnnexe = axe.idAnnexe) AS note;";
+        Note note = new Note();
+        return (Note) note.getData(query, BddObject.getPostgreSQL())[0];
     }
 
     public boolean checkMatch(User user) throws Exception {

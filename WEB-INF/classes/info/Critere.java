@@ -10,14 +10,14 @@ public class Critere extends BddObject {
     String idAnnexe;
     String idUser;
     int coefficient;
-    Annexe annexe;
+    String nom;
 
-    public Annexe getAnnexe() {
-        return annexe;
+    public String getNom() {
+        return nom;
     }
 
-    public void setAnnexe(Annexe annexe) {
-        this.annexe = annexe;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public String getIdCritere() {
@@ -68,16 +68,10 @@ public class Critere extends BddObject {
     }
 
     public Critere() throws Exception {
-        super("Criteres", getPostgreSQL());
+        this.setTable("Criteres AS c JOIN Annexes AS a ON c.idAnnexe = a.idAnnexe");
         this.setCountPK(7);
         this.setPrefix("CRI");
         this.setFunctionPK("getSeqCritere()");
-    }
-
-    public void setAnnexe() throws Exception {
-        Annexe axe = new Annexe();
-        axe.setIdAnnexe(this.idAnnexe);
-        this.setAnnexe(Annexe.convert(axe.getData(getPostgreSQL(), null, "idAnnexe"))[0]);
     }
 
     public Critere(String idAnnexe, String idUser, int coefficient) throws Exception {

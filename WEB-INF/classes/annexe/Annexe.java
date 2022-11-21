@@ -28,7 +28,7 @@ public class Annexe extends BddObject {
     }
 
     public Annexe() throws Exception {
-        super("Annexes", getPostgreSQL());
+        this.setTable("Annexes");
         this.setCountPK(4);
         this.setPrefix("A");
         this.setFunctionPK("getSeqAnnexe()");

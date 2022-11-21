@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Vector;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -65,24 +66,7 @@ public abstract class BddObject {
         connection.setAutoCommit(false);
         return connection;
     }
-
-    public BddObject(String table, Connection connection) throws Exception {
-        if (checkArgument(table, connection)) throw new Exception("Argument not coherent");
-    }
-
-    public boolean checkArgument(String table, Connection connection) throws Exception {
-        Field[] fields = this.getClass().getDeclaredFields();
-        String[] columns = listColumn("SELECT * FROM " + table, connection);
-        if (fields.length < columns.length) throw new Exception("Fields is less than columns");
-        for (int i = 0; i < columns.length; i++) {
-            if (!fields[i].getName().toUpperCase().equals(columns[i].toUpperCase()))
-                return true;
-        }
-        this.setTable(table);
-        connection.close();
-        return false;
-    }
-
+    
     /**
      * <p>Get list of column name in query<p>
      * @param query : {@code SELECT} query
@@ -104,22 +88,17 @@ public abstract class BddObject {
         return colonnes;
     }
 
-    /**
-     * <p>Function to get data in database and convert it to {@code Object[]}<p>
-     * <p>Object must have getter and setter function of each arguments and order by value of this query<p>
-     * @param obj : represent object for return value
-     * @param query : query with {@code SELECT} and the column of this projection is argument of new object
-     * @param connection : your connection for getting data:
-     * @return your data in object structure to {@code Object[]}
-     * @throws Exception
-     */
     public Object[] getData(Connection connection, String order, String... predicat) throws Exception {
-        Statement statement = connection.createStatement();
         String sql = (predicat.length == 0) ? "SELECT * FROM " + this.getTable() 
                     : "SELECT * FROM " + this.getTable() + " WHERE " + predicat(predicat);
         if (order != null) sql += " ORDER BY "+ order;
-        ResultSet result = statement.executeQuery(sql);
-        String[] liste = listColumn(sql, connection); // get liste of column length
+        return getData(sql, connection);
+    }
+
+    public Object[] getData(String query, Connection connection) throws Exception {
+        Statement statement = connection.createStatement();
+        ResultSet result = statement.executeQuery(query);
+        String[] liste = listColumn(query, connection); // get liste of column length
         Object[] employees = convertToObject(result, liste.length);
         result.close();
         statement.close();
@@ -150,15 +129,6 @@ public abstract class BddObject {
         return sql.substring(0, sql.length() - 5); // Delete last " AND " in sql
     }
     
-    /**
-     * <p>Function to insert object in database {@code connection}<p>
-     * <p>This function support Date to ('YYYY-MM-DD') format and Timestamp to ('YYYY-MM-DD HH24:MI:SS.FF') format value.
-     * Time isn't support to connection Oracle<p>
-     * <p>Arguments in this obj must be order by column name<p>
-     * @param connection : if {@code null} by default this create new Oracle connection and not null is use for transaction
-     * . Oracle and PostgreSQL is supported of this function
-     * @throws Exception
-     */
     public void insert(Connection connection) throws Exception {
         boolean connect = false;
         if (connection == null) {connection = getPostgreSQL(); connect = true;}
@@ -175,22 +145,13 @@ public abstract class BddObject {
     }
     
     static String createColumn(String[] colonnes) {
-        String colonne = "(";
-        for (int i = 0; i < colonnes.length; i++)
-            colonne += colonnes[i] + ",";
-        colonne = colonne.substring(0, colonne.length()-1)+")";
-        return colonne;
+        String result = "(";
+        for (String colonne : colonnes)
+            result += colonne + ",";
+        result = result.substring(0, result.length()-1)+")";
+        return result;
     }
 
-    /**
-     * <p>Update some data in database with selected table<p>
-     * @param value : values to update in table
-     * @param table : table name for updating
-     * @param column : column names to update
-     * @param predicat : condition with format {@code Column=Value}
-     * @param connection : if {@code null} by default this create new Oracle connection and not null is use for transaction. Oracle and PostgreSQL is supported of this function
-     * @throws Exception if Value and column length isn't equals
-     */
     public void update(String[] column, Object[] value, String ID, Connection connection) throws Exception {
         if (value.length != column.length) throw new Exception("Value and column must be equals");
         boolean connect = false;

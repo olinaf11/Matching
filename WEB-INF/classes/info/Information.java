@@ -67,7 +67,6 @@ public class Information extends BddObject {
     }
 
     public Information() throws Exception {
-        super("Informations", getPostgreSQL());
         this.setCountPK(7);
         this.setTable("Informations");
         this.setPrefix("INF");

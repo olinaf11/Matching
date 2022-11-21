@@ -18,3 +18,4 @@ javac ./ListMatch.java
 javac ./InsertRaikitra.java
 javac ./raikitra/Indisponible.java
 javac ./InsertIndisponible.java
+javac ./note/Note.java

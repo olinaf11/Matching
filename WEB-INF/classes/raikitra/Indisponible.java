@@ -30,7 +30,7 @@ public class Indisponible extends BddObject {
     }
 
     public Indisponible() throws Exception {
-        super("indisponible", getPostgreSQL());
+        this.setTable("Indisponible");
     }
 
     public Indisponible(String idIndispo, String idUser) throws Exception {

@@ -55,7 +55,7 @@ public class Raikitra extends BddObject {
     }
 
     public Raikitra() throws Exception {
-        super("raikitra", getPostgreSQL());
+        this.setTable("Raikitra");
         this.setCountPK(7);
         this.setPrefix("RAI");
         this.setFunctionPK("getSeqRaikitra()");
