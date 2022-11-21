@@ -12,7 +12,6 @@ public class CheckLogin extends HttpServlet {
         String password = request.getParameter("password");
         try {
             User user = new User(name, password);
-            user.setTable("users");
             User[] users = user.find();
             if (users.length > 0) {
                 HttpSession session = request.getSession();

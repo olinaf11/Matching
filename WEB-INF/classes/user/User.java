@@ -76,7 +76,7 @@ public class User extends BddObject {
 
     public User() {
         this.setCountPK(7);
-        this.setTable("users_disponible");
+        this.setTable("users");
         this.setPrefix("USR");
         this.setFunctionPK("getsequser()");
     }
@@ -135,7 +135,9 @@ public class User extends BddObject {
     }
 
     public User[] getProposition() throws Exception {
-        User[] users = User.convert(new User().getData(getPostgreSQL(), null));
+        User userTable = new User();
+        userTable.setTable("get_users_disponible('" + this.getIdUser() + "') AS f(idUser, nom, password, genre)");
+        User[] users = User.convert(userTable.getData(getPostgreSQL(), null));
         List<User> match = new ArrayList<User>();
         this.setCritereInfos();
         for (User user : users) {

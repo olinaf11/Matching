@@ -16,3 +16,5 @@ javac ./ListCritere.java
 javac ./InsertMatch.java
 javac ./ListMatch.java
 javac ./InsertRaikitra.java
+javac ./raikitra/Indisponible.java
+javac ./InsertIndisponible.java

@@ -130,12 +130,24 @@ UPDATE informations SET note=18.0 WHERE idinfo='INF0006';
 UPDATE indisponible SET iduser='USR0003' WHERE idindispo=2;
 INSERT INTO raikitra (iduserb, iduserv) VALUES
     ('USR0006', 'USR0017');
-INSERT INTO indisponible (idUser) VALUES
-    ('USR0004');
+INSERT INTO indisponible (idIndispo, idUser) VALUES
+    ('USR0001', 'USR0002');
 SELECT iduserb FROM raikitra UNION SELECT iduserv FROM raikitra UNION SELECT iduser FROM indisponible;
 SELECT * FROM Users WHERE iduser NOT IN (SELECT iduserb FROM raikitra UNION SELECT iduserv FROM raikitra UNION SELECT iduser FROM indisponible);
 CREATE VIEW users_disponible AS
-SELECT * FROM Users WHERE iduser NOT IN (SELECT iduserb FROM raikitra UNION SELECT iduserv FROM raikitra UNION SELECT iduser FROM indisponible);
+SELECT *
+FROM Users
+WHERE iduser NOT IN (
+    SELECT iduser1
+    FROM raikitra 
+    UNION 
+    SELECT iduser2
+    FROM raikitra
+    UNION
+    SELECT idUser
+    FROM Indisponible 
+    WHERE idIndispo='USR0004'
+);
 
 CREATE TABLE Match (
     idMatch VARCHAR PRIMARY KEY,
@@ -195,3 +207,44 @@ SELECT * FROM Users WHERE idUser NOT IN (
     UNION 
     SELECT idUser2 FROM raikitra
 );
+
+SELECT *
+FROM Indisponible 
+WHERE idIndispo='USR0004';
+SELECT *
+FROM users
+WHERE idUser NOT IN (
+    SELECT *
+    FROM Indisponible 
+    WHERE idIndispo='USR0004'
+);
+
+CREATE OR REPLACE FUNCTION get_users_disponible (idCurrentUser VARCHAR) 
+    RETURNS TABLE (
+        idUser_disponible VARCHAR,
+        nom_disponible VARCHAR,
+        password_disponible VARCHAR,
+        genre_disponible VARCHAR
+    ) 
+AS $$
+BEGIN
+    RETURN QUERY SELECT idUser, nom, password, genre
+    FROM Users
+    WHERE iduser NOT IN (
+        SELECT iduser1
+        FROM raikitra 
+        UNION 
+        SELECT iduser2
+        FROM raikitra
+        UNION
+        SELECT idUser
+        FROM Indisponible 
+        WHERE idIndispo=idCurrentUser
+    );
+END; $$ 
+
+LANGUAGE 'plpgsql';
+
+ALTER TABLE Indisponible ALTER COLUMN idIndispo TYPE VARCHAR;
+
+SELECT * FROM get_users_disponible('USR0001') AS f(idUser, nom, password, genre);

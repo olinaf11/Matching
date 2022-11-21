@@ -112,4 +112,14 @@
 		<url-pattern>/insert-raikitra</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>InsertIndisponible</servlet-name>
+		<servlet-class>InsertIndisponible</servlet-class>	
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>InsertIndisponible</servlet-name>
+		<url-pattern>/insert-indisponible</url-pattern>
+	</servlet-mapping>
+
 </web-app>

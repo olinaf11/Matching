@@ -40,7 +40,7 @@
     </div>
 
     
-    <div class="container mt-4" style="margin-left: 350px;">
+    <div class="container mt-4 w-75" style="margin-left: 350px;">
       <h2>Proposition</h2>
       <table class="table w-75">
         <tr>
@@ -51,21 +51,24 @@
           <th>Diplome</th>
           <th>Nationalite</th>
         </tr>
-        <% for (int i = 0; i < propositions.length; i++) { %>
+        <% for (User proposition : propositions) { %>
         <tr>
-          <td><% out.print(propositions[i].getNom()); %></td>
-          <% Information[] infos = propositions[i].getInfos();
+          <td><% out.print(proposition.getNom()); %></td>
+          <% Information[] infos = proposition.getInfos();
           for (int j = 0; j < infos.length; j++) { %>
             <td><% out.print(infos[j].getValeur()); %></td>
           <% } %>
           <td>
-          <% if (user.checkMatch(propositions[i])) { %>
+          <% if (user.checkMatch(proposition)) { %>
             <div class="btn btn-outline-warning">Déja intéressé</div>
-          <% } else if (user.checkInvited(propositions[i]) != null) { %>
-            <a href="insert-raikitra?idUser=<% out.print(propositions[i].getIdUser()); %>&&idMatch=<% out.print(user.checkInvited(propositions[i]).getIdMatch()); %>" class="btn btn-primary">OK</a>
+          <% } else if (user.checkInvited(proposition) != null) { %>
+            <a href="insert-raikitra?idUser=<% out.print(proposition.getIdUser()); %>&&idMatch=<% out.print(user.checkInvited(proposition).getIdMatch()); %>" class="btn btn-primary">OK</a>
           <% } else { %>
-            <a href="insert-match?idUser=<% out.print(propositions[i].getIdUser()); %>" class="btn btn-primary">Match</a>
+            <a href="insert-match?idUser=<% out.print(proposition.getIdUser()); %>" class="btn btn-primary">Match</a>
           <% } %>
+          </td>
+          <td>
+            <a href="insert-indisponible?idUser=<% out.print(proposition.getIdUser()); %>" class="btn btn-primary">Retirer</a>
           </td>
         </tr>
         <% } %>
