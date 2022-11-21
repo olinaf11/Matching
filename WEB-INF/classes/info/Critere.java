@@ -10,10 +10,19 @@ public class Critere extends BddObject {
     String idAnnexe;
     String idUser;
     int coefficient;
+    String idannexe;
     String nom;
+    
+    public String getIdannexe() {
+        return idannexe;
+    }
 
     public String getNom() {
         return nom;
+    }
+
+    public void setIdannexe(String idannexe) {
+        this.idannexe = idannexe;
     }
 
     public void setNom(String nom) {

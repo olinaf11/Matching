@@ -5,13 +5,15 @@ import user.User;
 public class Main {
     public static void main(String[] args) throws Exception {
         try {
-            User lynda = new User();
-            lynda.setIdUser("USR0004");
-            User daniel = new User();
-            daniel.setIdUser("USR0006");
-            System.out.println(lynda.getNote(daniel).getNote());
+            User mertina = new User();
+            mertina.setIdUser("USR0004");
+            mertina.setNom("Mertina");
+            mertina.setGenre("feminin");
+            for (User user : mertina.getProposition()) {
+                System.out.println(user.getNom());
+            }
         } catch (Exception e) {
-            System.out.println(e.getCause().getMessage());
+            System.out.println(e.getMessage());
         }
     }
 }
