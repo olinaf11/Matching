@@ -40,7 +40,7 @@
     </div>
 
     
-    <div class="container mt-4 w-75" style="margin-left: 350px;">
+    <div class="container mt-4 w-50" style="margin-left: 350px;">
       <h2>Proposition</h2>
       <table class="table w-75">
         <tr>
