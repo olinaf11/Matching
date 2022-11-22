@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="annexe.Annexe" %>
+<%@ page import="axe.Axe" %>
 <%
-    Annexe[] annexes = (Annexe[]) request.getAttribute("axes");
+    Axe[] axes = (Axe[]) request.getAttribute("axes");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +16,7 @@
     <h2 class="text-center mt-5">Vos critere important de match</h2>
     <div class="container mt-5 w-50">
         <form action="insert-critere" method="post">
-            <% for (Annexe axe : annexes) { %>
+            <% for (Axe axe : axes) { %>
             <div class="mt-3">
                 <label for="<% out.print(axe.getNom()); %>" class="form-label"><% out.print(axe.getNom()); %></label>
                 <input type="text" class="form-control" name="<% out.print(axe.getNom()); %>" id="<% out.print(axe.getNom()); %>" placeholder="/10">

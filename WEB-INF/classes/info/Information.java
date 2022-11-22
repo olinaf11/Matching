@@ -1,20 +1,20 @@
 package info;
 
-import annexe.Annexe;
+import axe.Axe;
 import connection.BddObject;
 import user.User;
 
 public class Information extends BddObject {
     
     String idInfo;
-    String idAnnexe;
+    String idAxe;
     String idUser;
     double note;
     String valeur;
 
     public void setIdInfo(String idInfo) throws Exception {
         if (!idInfo.contains(this.getPrefix()) || idInfo.length() != this.getCountPK()) 
-            throw new Exception("IdAnnexe is invalid");
+            throw new Exception("IdAxe is invalid");
         this.idInfo = idInfo;
     }
     
@@ -22,11 +22,11 @@ public class Information extends BddObject {
         this.valeur = valeur;
     }
 
-    public void setIdAnnexe(String idAnnexe) throws Exception {
-        Annexe annexe = new Annexe();
-        if (!idAnnexe.contains(annexe.getPrefix()) || idAnnexe.length() != annexe.getCountPK()) 
-            throw new Exception("IdAnnexe is invalid");
-        this.idAnnexe = idAnnexe;
+    public void setIdAxe(String idAxe) throws Exception {
+        Axe Axe = new Axe();
+        if (!idAxe.contains(Axe.getPrefix()) || idAxe.length() != Axe.getCountPK()) 
+            throw new Exception("IdAxe is invalid");
+        this.idAxe = idAxe;
     }
     
     public void setIdUser(String idUser) throws Exception {
@@ -54,8 +54,8 @@ public class Information extends BddObject {
         return valeur;
     }
 
-    public String getIdAnnexe() {
-        return idAnnexe;
+    public String getIdAxe() {
+        return idAxe;
     }
 
     public String getIdUser() {
@@ -78,19 +78,19 @@ public class Information extends BddObject {
         setIdUser(idUser);
     }
 
-    public Information(String idAnnexe, String idUser, double note, String value) throws Exception {
+    public Information(String idAxe, String idUser, double note, String value) throws Exception {
         this();
         this.setIdInfo(buildPrimaryKey(getPostgreSQL()));
-        this.setIdAnnexe(idAnnexe);
+        this.setIdAxe(idAxe);
         this.setIdUser(idUser);
         this.setNote(note);
         this.setValeur(value);
     }
     
-    public Information(String idAnnexe, String idUser, String value) throws Exception {
+    public Information(String idAxe, String idUser, String value) throws Exception {
         this();
         this.setIdInfo(buildPrimaryKey(getPostgreSQL()));
-        this.setIdAnnexe(idAnnexe);
+        this.setIdAxe(idAxe);
         this.setIdUser(idUser);
         this.setNote(convertToNote(value));
         this.setValeur(value);
@@ -98,7 +98,7 @@ public class Information extends BddObject {
 
     public double convertToNote(String value) {
         double note = 0;
-        switch (idAnnexe) {
+        switch (idAxe) {
             case "A020":
                 if (value.equals("Oui")) note = 18;
                 else note = 9;    

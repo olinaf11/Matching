@@ -1,4 +1,4 @@
-javac ./annexe/Annexe.java
+javac ./Axe/Axe.java
 javac ./info/Critere.java
 javac ./info/Information.java
 javac ./user/User.java

@@ -11,7 +11,7 @@ public class Inscription extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         List<BddObject> bdd = new ArrayList<BddObject>();
-        String name = request.getParameter("name");
+        String name = request.getParameter("nom");
         String password = request.getParameter("password");
         String genre = request.getParameter("genre");
         try {

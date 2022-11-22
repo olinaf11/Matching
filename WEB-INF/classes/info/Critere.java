@@ -1,28 +1,28 @@
 package info;
 
-import annexe.Annexe;
+import axe.Axe;
 import connection.BddObject;
 import user.User;
 
 public class Critere extends BddObject {
 
     String idCritere;
-    String idAnnexe;
+    String idAxe;
     String idUser;
     int coefficient;
-    String idannexe;
+    String idaxe;
     String nom;
     
-    public String getIdannexe() {
-        return idannexe;
+    public String getIdaxe() {
+        return idAxe;
     }
 
     public String getNom() {
         return nom;
     }
 
-    public void setIdannexe(String idannexe) {
-        this.idannexe = idannexe;
+    public void setIdaxe(String idAxe) {
+        this.idAxe = idAxe;
     }
 
     public void setNom(String nom) {
@@ -37,8 +37,8 @@ public class Critere extends BddObject {
         return coefficient;
     }
 
-    public String getIdAnnexe() {
-        return idAnnexe;
+    public String getIdAxe() {
+        return idAxe;
     }
 
     public String getIdUser() {
@@ -51,11 +51,11 @@ public class Critere extends BddObject {
         this.idCritere = id;
     }
 
-    public void setIdAnnexe(String idAnnexe) throws Exception {
-        Annexe annexe = new Annexe();
-        if (!idAnnexe.contains(annexe.getPrefix()) || idAnnexe.length() != annexe.getCountPK()) 
-            throw new Exception("IdAnnexe is invalid");
-        this.idAnnexe = idAnnexe;
+    public void setIdAxe(String idAxe) throws Exception {
+        Axe Axe = new Axe();
+        if (!idAxe.contains(Axe.getPrefix()) || idAxe.length() != Axe.getCountPK()) 
+            throw new Exception("IdAxe is invalid");
+        this.idAxe = idAxe;
     }
 
     public void setCoefficient(int coefficient) throws Exception {
@@ -77,16 +77,16 @@ public class Critere extends BddObject {
     }
 
     public Critere() throws Exception {
-        this.setTable("Criteres AS c JOIN Annexes AS a ON c.idAnnexe = a.idAnnexe");
+        this.setTable("Criteres");
         this.setCountPK(7);
         this.setPrefix("CRI");
         this.setFunctionPK("getSeqCritere()");
     }
 
-    public Critere(String idAnnexe, String idUser, int coefficient) throws Exception {
+    public Critere(String idAxe, String idUser, int coefficient) throws Exception {
         this();
         this.setIdCritere(buildPrimaryKey(getPostgreSQL()));
-        this.setIdAnnexe(idAnnexe);
+        this.setIdAxe(idAxe);
         this.setIdUser(idUser);
         this.setCoefficient(coefficient);
     }

@@ -26,10 +26,8 @@
         <a href="liste" class="btn btn-primary mb-3">Propositions</a>
         <h5>Vos preferences : </h5>
         <ul>
-        <%for (Critere critere : criteres) { 
-          critere.setAnnexe();
-        %>
-          <li><% out.print(critere.getAnnexe().getNom()); %> : <% out.print(critere.getCoefficient()); %></li>
+        <%for (Critere critere : criteres) { %>
+          <li><% out.print(critere.getNom()); %> : <% out.print(critere.getCoefficient()); %></li>
         <% } %>
         </ul>
         <hr>

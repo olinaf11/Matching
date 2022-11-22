@@ -1,6 +1,8 @@
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import annexe.Annexe;
+
+import axe.Axe;
 import connection.BddObject;
 import info.Information;
 import jakarta.servlet.*;
@@ -14,15 +16,19 @@ public class InsertInfo extends HttpServlet {
         try {
             ServletContext context = this.getServletContext();
             List<BddObject> bdd = (List<BddObject>) context.getAttribute("bdd");
-            Object[] annexes = new Annexe().getData(BddObject.getPostgreSQL(), null);
-            for (Object object : annexes) {
-                Annexe annexe = (Annexe) object;
-                Information information = new Information(annexe.getIdAnnexe(), ((User) bdd.get(0)).getIdUser(), request.getParameter(annexe.getNom()));
+            Object[] axes = new Axe().getData(BddObject.getPostgreSQL(), null);
+            for (Object object : axes) {
+                Axe axe = (Axe) object;
+                Information information = new Information(axe.getIdAxe(), ((User) bdd.get(0)).getIdUser(), request.getParameter(axe.getNom()));
                 bdd.add(information);
             }
             response.sendRedirect("critere");
+        } catch (InvocationTargetException e) {
+            PrintWriter out = response.getWriter();
+            out.println(e.getCause().getMessage());
         } catch (Exception e) {
-            response.sendRedirect("error.jsp?error="+e.getMessage());
+            PrintWriter out = response.getWriter();
+            out.println(e.getMessage());
         }
     }
 }

@@ -1,7 +1,8 @@
 import java.io.*;
 import java.sql.Connection;
 import java.util.List;
-import annexe.Annexe;
+
+import axe.Axe;
 import connection.BddObject;
 import info.Critere;
 import jakarta.servlet.*;
@@ -15,10 +16,10 @@ public class InsertCritere extends HttpServlet {
         try {
             ServletContext context = this.getServletContext();
             List<BddObject> bdd = (List<BddObject>) context.getAttribute("bdd");
-            Object[] annexes = new Annexe().getData(BddObject.getPostgreSQL(), "idannexe");
-            for (Object object : annexes) {
-                Annexe annexe = (Annexe) object;
-                Critere critere = new Critere(annexe.getIdAnnexe(), ((User) bdd.get(0)).getIdUser(), Integer.parseInt(request.getParameter(annexe.getNom())));
+            Object[] axes = new Axe().getData(BddObject.getPostgreSQL(), "idAxe");
+            for (Object object : axes) {
+                Axe Axe = (Axe) object;
+                Critere critere = new Critere(Axe.getIdAxe(), ((User) bdd.get(0)).getIdUser(), Integer.parseInt(request.getParameter(Axe.getNom())));
                 bdd.add(critere);
             }
             insertAll(bdd);

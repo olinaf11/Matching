@@ -18,31 +18,31 @@ END;
 $users$ LANGUAGE plpgsql;
 ALTER SEQUENCE seq_user RESTART WITH 1;
 
-CREATE TABLE Annexes (
-    idAnnexe VARCHAR PRIMARY KEY,
+CREATE TABLE axes (
+    idAxe VARCHAR PRIMARY KEY,
     nom VARCHAR
 );
 
-CREATE SEQUENCE seq_annexe
+CREATE SEQUENCE seq_Axe
 INCREMENT 10
 MINVALUE 10 
 MAXVALUE 200
 START 10
 CYCLE;
 
-CREATE OR REPLACE FUNCTION getSeqAnnexe()
-    RETURNS integer AS $annexe$
-    declare annexe integer;
+CREATE OR REPLACE FUNCTION getSeqAxe()
+    RETURNS integer AS $Axe$
+    declare Axe integer;
 BEGIN
-    SELECT nextval('seq_annexe') INTO annexe FROM DUAL;
-    RETURN annexe;
+    SELECT nextval('seq_Axe') INTO Axe FROM DUAL;
+    RETURN Axe;
 END;
-$annexe$ LANGUAGE plpgsql;
-ALTER SEQUENCE seq_annexe RESTART WITH 10;
+$Axe$ LANGUAGE plpgsql;
+ALTER SEQUENCE seq_Axe RESTART WITH 10;
 
 CREATE TABLE Informations (
     idInfo VARCHAR PRIMARY KEY,
-    idAnnexe VARCHAR REFERENCES Annexes (idAnnexe),
+    idAxe VARCHAR REFERENCES axes (idAxe),
     idUser VARCHAR REFERENCES Users (idUser),
     note DECIMAL
 );
@@ -63,7 +63,7 @@ ALTER SEQUENCE seq_information RESTART WITH 1;
 
 CREATE TABLE Critere (
     idCritere VARCHAR PRIMARY KEY,
-    idAnnexe VARCHAR REFERENCES Annexes (idAnnexe),
+    idAxe VARCHAR REFERENCES axes (idAxe),
     idUser VARCHAR REFERENCES Users (idUser),
     coefficient INTEGER
 );
@@ -118,7 +118,7 @@ BEGIN
 END;
 $indisponible$ LANGUAGE plpgsql;
 
-ALTER SEQUENCE seq_annexe RESTART WITH 10;
+ALTER SEQUENCE seq_Axe RESTART WITH 10;
 ALTER SEQUENCE seq_user RESTART WITH 1;
 ALTER SEQUENCE seq_information RESTART WITH 1;
 ALTER SEQUENCE seq_critere RESTART WITH 1;
@@ -264,8 +264,8 @@ FROM (
     SELECT *
     FROM criteres
     WHERE idUser = 'USR0006'
-) AS c ON info.idAnnexe = c.idAnnexe
-JOIN Annexes AS axe ON info.idAnnexe = axe.idAnnexe;
+) AS c ON info.idAxe = c.idAxe
+JOIN axes AS axe ON info.idAxe = axe.idAxe;
 
 SELECT SUM(note) / SUM(coefficient)
 FROM (
@@ -273,13 +273,107 @@ FROM (
     FROM (
         SELECT *
         FROM informations
-        WHERE idUser = 'USR0001'
+        WHERE idUser = 'USR0039'
     ) AS info JOIN (
         SELECT *
         FROM criteres
-        WHERE idUser = 'USR0004'
-    ) AS c ON info.idAnnexe = c.idAnnexe
-    JOIN Annexes AS axe ON info.idAnnexe = axe.idAnnexe
+        WHERE idUser = 'USR0020'
+    ) AS c ON info.idAxe = c.idAxe
+    JOIN axes AS axe ON info.idAxe = axe.idAxe
 ) AS note;
-SELECT SUM(note) / SUM(coefficient) FROM (SELECT (note*coefficient) as note, c.coefficient FROM (SELECT * FROM informations WHERE idUser = 'USR0004') AS info JOIN (SELECT * FROM criteres WHERE idUser = 'USR0006') AS c ON info.idAnnexe = c.idAnnexe JOIN Annexes AS axe ON info.idAnnexe = axe.idAnnexe) AS note;
-SELECT * FROM Criteres AS c JOIN Annexes AS a ON c.idAnnexe = a.idAnnexe; 
+SELECT SUM(note) / SUM(coefficient) FROM (SELECT (note*coefficient) as note, c.coefficient FROM (SELECT * FROM informations WHERE idUser = 'USR0004') AS info JOIN (SELECT * FROM criteres WHERE idUser = 'USR0006') AS c ON info.idAxe = c.idAxe JOIN axes AS axe ON info.idAxe = axe.idAxe) AS note;
+SELECT * FROM Criteres AS c JOIN axes AS a ON c.idAxe = a.idAxe; 
+ALTER TABLE axes
+RENAME TO Axes; 
+ALTER TABLE criteres 
+RENAME COLUMN idAnnexe TO idaxe;
+ALTER TABLE informations 
+RENAME COLUMN idAnnexe TO idaxe;
+SELECT info.iduser, note, coefficient  FROM informations AS info JOIN (
+    SELECT *
+    FROM criteres
+    WHERE idUser = 'USR0039'
+) AS c ON info.idAxe = c.idAxe;
+SELECT SUM(coefficient) FROM (
+    SELECT *
+    FROM criteres
+    WHERE idUser = 'USR0039'
+) AS criteres;
+SELECT iduser
+FROM (
+    SELECT info.iduser, note, coefficient  FROM informations AS info JOIN (
+        SELECT *
+        FROM criteres
+        WHERE idUser = 'USR0039'
+    ) AS c ON info.idAxe = c.idAxe
+) AS info
+GROUP BY idUser
+ORDER BY SUM((coefficient * note)) / SUM(coefficient) DESC;
+SELECT Classement.iduser, nom, password, genre, note FROM
+(SELECT * FROM get_users_disponible('USR0019') AS f(idUser, nom, password, genre)) AS users JOIN (
+    SELECT info.iduser, SUM((coefficient * note)) / SUM(coefficient) as note
+    FROM (
+        SELECT info.iduser, coefficient, note  FROM informations AS info JOIN (
+            SELECT *
+            FROM criteres
+            WHERE idUser = 'USR0019'
+        ) AS c ON info.idAxe = c.idAxe
+    ) AS info JOIN users ON info.iduser = users.idUser
+    GROUP BY info.idUser
+) AS Classement ON Classement.idUser = users.idUser
+WHERE genre = 'feminin' AND note >=14 AND get_note(Classement.idUser, 'USR0019') >= 14
+ORDER BY note DESC;
+
+CREATE OR REPLACE FUNCTION get_note (idUser1 VARCHAR, idUser2 VARCHAR) 
+    RETURNS DOUBLE PRECISION
+AS $$
+declare
+   note_moyenne DOUBLE PRECISION;
+BEGIN
+    SELECT (SUM(note) / SUM(coefficient)) into note_moyenne
+    FROM (
+        SELECT (note * coefficient) as note, c.coefficient
+        FROM (
+            SELECT *
+            FROM informations
+            WHERE idUser = idUser2
+        ) AS info JOIN (
+            SELECT *
+            FROM criteres
+            WHERE idUser = idUser1
+        ) AS c ON info.idAxe = c.idAxe
+        JOIN axes AS axe ON info.idAxe = axe.idAxe
+    ) AS note;
+
+    RETURN note_moyenne;
+END; $$ 
+
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION get_classement (idCurrentUser VARCHAR, genre_user VARCHAR) 
+    RETURNS TABLE (
+        idUser_disponible VARCHAR,
+        nom_disponible VARCHAR,
+        password_disponible VARCHAR,
+        genre_disponible VARCHAR,
+        note_disponible NUMERIC
+    ) 
+AS $$
+BEGIN
+    RETURN QUERY SELECT Classement.iduser, nom, password, genre, note FROM
+    (SELECT * FROM get_users_disponible(idCurrentUser) AS f(idUser, nom, password, genre)) AS users JOIN (
+        SELECT info.iduser, SUM((coefficient * note)) / SUM(coefficient) as note
+        FROM (
+            SELECT info.iduser, coefficient, note  FROM informations AS info JOIN (
+                SELECT *
+                FROM criteres
+                WHERE idUser = idCurrentUser
+            ) AS c ON info.idAxe = c.idAxe
+        ) AS info JOIN users ON info.iduser = users.idUser
+        GROUP BY info.idUser
+    ) AS Classement ON Classement.idUser = users.idUser
+    WHERE genre = genre_user AND note >=14 AND get_note(Classement.idUser, idCurrentUser) >= 14 AND Classement.idUser != idCurrentUser
+    ORDER BY note DESC;
+END; $$ 
+
+LANGUAGE 'plpgsql';
