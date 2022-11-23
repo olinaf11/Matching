@@ -46,8 +46,7 @@ public class Note extends BddObject {
                 note = 10 + Integer.parseInt(index);
                 break;
             case "A060":
-                if (value.equals("Malagasy")) note = 18;
-                else note = 9;
+                note = getNote(value);
                 break;
             case "A070":
                 note = getNote(getIntervalle(value));
@@ -58,11 +57,11 @@ public class Note extends BddObject {
         return (note > 20) ? 20 : note;
     }
 
-    public String getIntervalle(String valeur) {
+    public static String getIntervalle(String valeur) {
         int age = Integer.parseInt(valeur);
         int[][] intervalle = {{20, 30}, {30, 40}, {40, 50}};
         for (int i = 0; i < intervalle.length; i++) {
-            if (intervalle[i][0] >= age && age <= intervalle[i][1])
+            if (intervalle[i][0] <= age && age <= intervalle[i][1])
                 return intervalle[i][0] + "-" + intervalle[i][1];
         }
         return "40-50";

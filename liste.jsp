@@ -2,10 +2,12 @@
 <%@ page import="user.User" %>
 <%@ page import="info.Critere" %>
 <%@ page import="info.Information" %>
+<%@ page import="axe.Axe" %>
 <%@ page import="java.util.List" %>
 <%
   User[] propositions = (User[]) request.getAttribute("proposition");
   User user = (User) request.getAttribute("user");
+  Axe[] axes = (Axe[]) request.getAttribute("axe");
   Critere[] criteres = user.getCriteres();
 %>
 <!DOCTYPE html>
@@ -40,14 +42,13 @@
     
     <div class="container mt-4 w-50" style="margin-left: 350px;">
       <h2>Proposition</h2>
-      <table class="table w-75">
+      <table class="table">
         <tr>
           <th>Nom</th>
-          <th>Fivavahana</th>
-          <th>Longueur (cm)</th>
-          <th>Salaire par mois</th>
-          <th>Diplome</th>
-          <th>Nationalite</th>
+          <% for (Axe axe : axes) { %>
+            <th><% out.print(axe.getNom()); %></th>
+          <% } %>
+          <th>Note</th>
         </tr>
         <% for (User proposition : propositions) { %>
         <tr>
@@ -56,6 +57,9 @@
           for (int j = 0; j < infos.length; j++) { %>
             <td><% out.print(infos[j].getValeur()); %></td>
           <% } %>
+          <td>
+            <% out.print(Math.round(proposition.getNote() * 100.0) / 100.0); %>
+          </td>
           <td>
           <% if (user.checkMatch(proposition)) { %>
             <div class="btn btn-outline-warning">Déja intéressé</div>
@@ -68,12 +72,11 @@
           <td>
             <a href="insert-indisponible?idUser=<% out.print(proposition.getIdUser()); %>" class="btn btn-primary">Retirer</a>
           </td>
-          <td>
-            <% out.print(Math.floor(proposition.getNote())); %>
-          </td>
         </tr>
         <% } %>
       </table>
+      <a href="liste?check=false" class="btn btn-primary">Show all</a>
+      <a href="liste" class="btn btn-primary">Classement</a>
     </div>
 
 </body>

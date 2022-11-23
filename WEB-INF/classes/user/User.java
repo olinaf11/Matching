@@ -1,5 +1,7 @@
 package user;
 
+import java.util.ArrayList;
+import java.util.List;
 import agregation.Liste;
 import axe.Axe;
 import connection.BddObject;
@@ -7,9 +9,6 @@ import info.Critere;
 import info.Information;
 import match.Match;
 import note.Note;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class User extends BddObject {
 
@@ -57,6 +56,7 @@ public class User extends BddObject {
     }
     
     public void setNote(double note) throws Exception {
+        
         this.note = note;
     }
     
@@ -156,18 +156,16 @@ public class User extends BddObject {
         double somme = 0;
         double coefficient = 0;
         for (int i = 0; i < this.criteres.length; i++) {
-            if (!user.getIdUser().equals("USR0057")) {
-                Axe axe = new Axe();
-                axe.setIdAxe(this.criteres[i].getIdAxe());
-                Note note = new Note(axe);
-                somme += this.criteres[i].getCoefficient() * note.convertToNote(user.getInfos()[i].getValeur());
-                coefficient += this.criteres[i].getCoefficient();
-            }
+            Axe axe = new Axe();
+            axe.setIdAxe(this.criteres[i].getIdAxe());
+            Note note = new Note(axe);
+            somme += this.criteres[i].getCoefficient() * note.convertToNote(user.getInfos()[i].getValeur());
+            coefficient += this.criteres[i].getCoefficient();
         }
         return somme / coefficient;
     }
 
-    public User[] getProposition() throws Exception {
+    public User[] getProposition(boolean condition) throws Exception {
         User userTable = new User();
         userTable.setTable("get_users_disponible('" + this.getIdUser() + "') AS f(idUser, nom, password, genre)");
         User[] users = User.convert(userTable.getData(getPostgreSQL(), null));
@@ -176,7 +174,9 @@ public class User extends BddObject {
         for (User user : users) {
             user.setCritereInfos();
             user.setNote(this.getNote(user));
-            if (!this.getIdUser().equals(user.getIdUser()) && !this.getGenre().equals(user.getGenre()))
+            boolean check = (condition) ? user.getNote() >= 12 && user.getNote(this) >= 12 && !this.getIdUser().equals(user.getIdUser()) && !this.getGenre().equals(user.getGenre()) 
+            : (!this.getIdUser().equals(user.getIdUser()) && !this.getGenre().equals(user.getGenre()));
+            if (check)
                 match.add(user);
         }
         User[] results = convert(match);

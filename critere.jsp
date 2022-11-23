@@ -27,7 +27,7 @@
             </div>
                 <% if (axe.getIntervalles().length > 0) {
                     for (Intervalle precision : axe.getIntervalles()) { %>
-                        <div class="row ms-3 mt-3">
+                        <div class="row ms-4 mt-3">
                             <% out.print(precision.getIntervalle()); %>
                             <select class="form-select mt-2" aria-label="Default select example" id="nationalite" name="<% out.print(precision.getIntervalle()); %>">
                                 <option value="Souhaite">Souhaite</option>
