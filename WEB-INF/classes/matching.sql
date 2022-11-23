@@ -12,7 +12,7 @@ CREATE OR REPLACE FUNCTION getSeqUser()
     RETURNS integer AS $users$
     declare users integer;
 BEGIN
-    SELECT nextval('seq_user') INTO users FROM DUAL;
+    SELECT nextval('seq_user') INTO users;
     RETURN users;
 END;
 $users$ LANGUAGE plpgsql;
@@ -55,7 +55,7 @@ CREATE OR REPLACE FUNCTION getSeqInformation()
     RETURNS integer AS $information$
     declare information integer;
 BEGIN
-    SELECT nextval('seq_information') INTO information FROM DUAL;
+    SELECT nextval('seq_information') INTO information;
     RETURN information;
 END;
 $information$ LANGUAGE plpgsql;
@@ -76,7 +76,7 @@ CREATE OR REPLACE FUNCTION getSeqCritere()
     RETURNS integer AS $critere$
     declare critere integer;
 BEGIN
-    SELECT nextval('seq_critere') INTO critere FROM DUAL;
+    SELECT nextval('seq_critere') INTO critere;
     RETURN critere;
 END;
 $critere$ LANGUAGE plpgsql;
@@ -101,7 +101,7 @@ END;
 $raikitra$ LANGUAGE plpgsql;
 
 CREATE TABLE Indisponible (
-    idIndispo SERIAL PRIMARY KEY,
+    idIndispo VARCHAR REFERENCES Users (idUser),
     idUser VARCHAR REFERENCES Users (idUser)
 );
 
@@ -377,3 +377,61 @@ BEGIN
 END; $$ 
 
 LANGUAGE 'plpgsql';
+
+CREATE TABLE Precision (
+    idPrecision VARCHAR PRIMARY KEY,
+    idIntervalle VARCHAR REFERENCES Intervalle (idIntervalle),
+    valeur VARCHAR REFERENCES Valeur (valeur)
+);
+
+CREATE TABLE Valeur (
+    valeur VARCHAR PRIMARY KEY,
+    note BIGINT
+);
+
+INSERT INTO Valeur (valeur, note) VALUES
+    ('Souhaite', 5),
+    ('Moyen', 4),
+    ('Passable', 3),
+    ('Mauvais', 1);
+
+CREATE TABLE Intervalle (
+    idIntervalle VARCHAR PRIMARY KEY,
+    idAxe VARCHAR REFERENCES Axes (idAxe),
+    intervalle VARCHAR
+);
+
+CREATE SEQUENCE seq_intervalle
+INCREMENT 1
+MINVALUE 1;
+CREATE OR REPLACE FUNCTION getSeqIntervalle()
+    RETURNS integer AS $intervalle$
+    declare intervalle integer;
+BEGIN
+    SELECT nextval('seq_intervalle') INTO intervalle FROM DUAL;
+    RETURN intervalle;
+END;
+$intervalle$ LANGUAGE plpgsql;
+CREATE SEQUENCE seq_precision
+INCREMENT 1
+MINVALUE 1;
+
+CREATE OR REPLACE FUNCTION getSeqPrecision()
+    RETURNS integer AS $precision$
+    declare precision integer;
+BEGIN
+    SELECT nextval('seq_precision') INTO precision;
+    RETURN precision;
+END;
+$precision$ LANGUAGE plpgsql;
+
+ALTER TABLE precisions
+ADD COLUMN idUser VARCHAR REFERENCES users (idUser);
+ALTER TABLE precision 
+RENAME COLUMN note TO valeur;
+ALTER TABLE precision ALTER COLUMN valeur TYPE VARCHAR;
+ALTER TABLE informations 
+DROP COLUMN note;
+SELECT idprecision, p.idintervalle, p.valeur, idUser, intervalle, idAxe, note FROM precisions AS p JOIN intervalle AS i ON p.idIntervalle = i.idIntervalle JOIN valeur AS v ON p.valeur = v.valeur;
+INSERT INTO criteres (idcritere, idaxe, iduser, coefficient) VALUES
+    ('CRI0104', 'A070', 'USR0058', 5);

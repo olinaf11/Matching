@@ -19,3 +19,5 @@ javac ./InsertRaikitra.java
 javac ./raikitra/Indisponible.java
 javac ./InsertIndisponible.java
 javac ./note/Note.java
+javac ./info/Precision.java
+javac ./info/Intervalle.java

@@ -17,7 +17,8 @@ public class Indisponible extends BddObject {
     }
 
     public void setIdIndispo(String idIndispo) throws Exception {
-        if (!idIndispo.contains(this.getPrefix()) || idIndispo.length() != this.getCountPK()) 
+        User user = new User();
+        if (!idIndispo.contains(user.getPrefix()) || idIndispo.length() != user.getCountPK()) 
             throw new Exception("idIndispo is invalid");
         this.idIndispo = idIndispo;
     }
@@ -30,6 +31,7 @@ public class Indisponible extends BddObject {
     }
 
     public Indisponible() throws Exception {
+        
         this.setTable("Indisponible");
     }
 

@@ -3,6 +3,7 @@ package user;
 import java.util.ArrayList;
 import java.util.List;
 import agregation.Liste;
+import axe.Axe;
 import connection.BddObject;
 import info.Critere;
 import info.Information;
@@ -109,7 +110,7 @@ public class User extends BddObject {
     public void setCritereInfos() throws Exception {
         Critere critere = new Critere(idUser);
         critere.setTable("Criteres AS c JOIN Axes AS a ON c.idAxe = a.idAxe");
-        this.setCriteres(Critere.convert(critere.getData(getPostgreSQL(), null, "idUser")));
+        this.setCriteres(Critere.convert(critere.getData(getPostgreSQL(), "c.idAxe", "idUser")));
         this.setInfos(Information.convert(new Information(idUser).getData(getPostgreSQL(), "idAxe", "idUser")));
     }
 
@@ -137,37 +138,51 @@ public class User extends BddObject {
         return results;
     }
 
-    public User[] getProposition() throws Exception {
-        User table = new User();
-        table.setTable("get_classement('" + this.getIdUser() + "', '" + this.getGenreOpposite() + "') AS f(idUser, nom, password, genre, note)");
-        Object[] users = table.getData(getPostgreSQL(), null);
-        User[] propositions = new User[users.length];
-        this.setCritereInfos();
-        for (int i = 0; i < users.length; i++) {
-            User user = (User) users[i]; 
-            user.setCritereInfos();
-            propositions[i] = user;
+    // public User[] getProposition() throws Exception {
+    //     User table = new User();
+    //     table.setTable("get_classement('" + this.getIdUser() + "', '" + this.getGenreOpposite() + "') AS f(idUser, nom, password, genre, note)");
+    //     Object[] users = table.getData(getPostgreSQL(), null);
+    //     User[] propositions = new User[users.length];
+    //     this.setCritereInfos();
+    //     for (int i = 0; i < users.length; i++) {
+    //         User user = (User) users[i];
+    //         user.setCritereInfos();
+    //         propositions[i] = user;
+    //     }
+    //     return propositions;
+    // 
+
+    public double getNote(User user) throws Exception {
+        double somme = 0;
+        double coefficient = 0;
+        for (int i = 0; i < this.criteres.length; i++) {
+            if (!user.getIdUser().equals("USR0057")) {
+                Axe axe = new Axe();
+                axe.setIdAxe(this.criteres[i].getIdAxe());
+                Note note = new Note(axe);
+                somme += this.criteres[i].getCoefficient() * note.convertToNote(user.getInfos()[i].getValeur());
+                coefficient += this.criteres[i].getCoefficient();
+            }
         }
-        return propositions;
+        return somme / coefficient;
     }
 
-    // public User[] getProposition() throws Exception {
-    //     User userTable = new User();
-    //     userTable.setTable("get_users_disponible('" + this.getIdUser() + "') AS f(idUser, nom, password, genre)");
-    //     User[] users = User.convert(userTable.getData(getPostgreSQL(), null));
-    //     List<User> match = new ArrayList<User>();
-    //     this.setCritereInfos();
-    //     for (User user : users) {
-    //         user.setNote(this.getNote(user).getNote());
-    //         if (user.getNote() >= 14 && user.getNote(this).getNote() >= 14 && !this.getIdUser().equals(user.getIdUser()) && !this.getGenre().equals(user.getGenre())) {
-    //             user.setCritereInfos();
-    //             match.add(user);
-    //         }
-    //     }
-    //     User[] results = convert(match);
-    //     Liste.sort(results, "getNote", "DESC");
-    //     return results;
-    // }
+    public User[] getProposition() throws Exception {
+        User userTable = new User();
+        userTable.setTable("get_users_disponible('" + this.getIdUser() + "') AS f(idUser, nom, password, genre)");
+        User[] users = User.convert(userTable.getData(getPostgreSQL(), null));
+        List<User> match = new ArrayList<User>();
+        this.setCritereInfos();
+        for (User user : users) {
+            user.setCritereInfos();
+            user.setNote(this.getNote(user));
+            if (user.getNote() >= 14 && user.getNote(this) >= 14 && !this.getIdUser().equals(user.getIdUser()) && !this.getGenre().equals(user.getGenre()))
+                match.add(user);
+        }
+        User[] results = convert(match);
+        Liste.sort(results, "getNote", "DESC");
+        return results;
+    }
 
     // public Note getNote(User user) throws Exception {
     //     String query = "SELECT SUM(note) / SUM(coefficient) FROM (SELECT (note*coefficient) as note, c.coefficient FROM (SELECT * FROM informations WHERE idUser = '" + user.getIdUser() + "') AS info JOIN (SELECT * FROM criteres WHERE idUser = '" + this.getIdUser() + "') AS c ON info.idAxe = c.idAxe JOIN axes AS axe ON info.idAxe = axe.idAxe) AS note;";

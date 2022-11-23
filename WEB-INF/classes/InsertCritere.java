@@ -5,6 +5,8 @@ import java.util.List;
 import axe.Axe;
 import connection.BddObject;
 import info.Critere;
+import info.Intervalle;
+import info.Precision;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import user.User;
@@ -18,14 +20,22 @@ public class InsertCritere extends HttpServlet {
             List<BddObject> bdd = (List<BddObject>) context.getAttribute("bdd");
             Object[] axes = new Axe().getData(BddObject.getPostgreSQL(), "idAxe");
             for (Object object : axes) {
-                Axe Axe = (Axe) object;
-                Critere critere = new Critere(Axe.getIdAxe(), ((User) bdd.get(0)).getIdUser(), Integer.parseInt(request.getParameter(Axe.getNom())));
+                Axe axe = (Axe) object;
+                axe.setIntervalles();
+                Critere critere = new Critere(axe.getIdAxe(), ((User) bdd.get(0)).getIdUser(), Integer.parseInt(request.getParameter(axe.getNom())));
+                if (axe.getIntervalles().length > 0) {
+                    for (Intervalle intervalle : axe.getIntervalles()) {
+                        Precision precision = new Precision(intervalle.getIdIntervalle(), request.getParameter(intervalle.getIntervalle()), ((User) bdd.get(0)).getIdUser());
+                        bdd.add(precision);
+                    }
+                }
                 bdd.add(critere);
             }
             insertAll(bdd);
             response.sendRedirect("index");
         } catch (Exception e) {
-            response.sendRedirect("error.jsp?error=" + e.getMessage());
+            PrintWriter out = response.getWriter();
+            out.println(e.getMessage());
         }
     }
 

@@ -9,7 +9,6 @@ public class Information extends BddObject {
     String idInfo;
     String idAxe;
     String idUser;
-    double note;
     String valeur;
 
     public void setIdInfo(String idInfo) throws Exception {
@@ -35,16 +34,6 @@ public class Information extends BddObject {
             throw new Exception("idUser is invalid");
         this.idUser = idUser;
     }
-
-    public void setNote(double value) throws Exception {
-        if (value < 0) {
-            throw new Exception("Value must be positive value");
-        } else if (value > 20) {
-            this.note = 20;
-        } else {
-            this.note = value;
-        }
-    }
     
     public String getIdInfo() {
         return idInfo;
@@ -62,10 +51,6 @@ public class Information extends BddObject {
         return idUser;
     }
 
-    public double getNote() {
-        return note;
-    }
-
     public Information() throws Exception {
         this.setCountPK(7);
         this.setTable("Informations");
@@ -77,48 +62,13 @@ public class Information extends BddObject {
         this();
         setIdUser(idUser);
     }
-
-    public Information(String idAxe, String idUser, double note, String value) throws Exception {
-        this();
-        this.setIdInfo(buildPrimaryKey(getPostgreSQL()));
-        this.setIdAxe(idAxe);
-        this.setIdUser(idUser);
-        this.setNote(note);
-        this.setValeur(value);
-    }
     
     public Information(String idAxe, String idUser, String value) throws Exception {
         this();
         this.setIdInfo(buildPrimaryKey(getPostgreSQL()));
         this.setIdAxe(idAxe);
         this.setIdUser(idUser);
-        this.setNote(convertToNote(value));
         this.setValeur(value);
-    }
-
-    public double convertToNote(String value) {
-        double note = 0;
-        switch (idAxe) {
-            case "A020":
-                if (value.equals("Oui")) note = 18;
-                else note = 9;    
-            break;
-            case "A030":
-                note = Double.parseDouble(value) / 10;
-                break;
-            case "A040":
-                note = Double.parseDouble(value) / 500;
-                break;
-            case "A050":
-                String index = value.split("[+]")[1];
-                note = 10 + Integer.parseInt(index);
-                break;
-            case "A060":
-                if (value.equals("Malagasy")) note = 18;
-                else note = 9;
-                break;
-        }
-        return (note > 20) ? 20 : note;
     }
 
     public static Information[] convert(Object[] objects) {
