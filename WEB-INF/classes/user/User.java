@@ -1,7 +1,5 @@
 package user;
 
-import java.util.ArrayList;
-import java.util.List;
 import agregation.Liste;
 import axe.Axe;
 import connection.BddObject;
@@ -9,6 +7,9 @@ import info.Critere;
 import info.Information;
 import match.Match;
 import note.Note;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class User extends BddObject {
 
@@ -56,7 +57,6 @@ public class User extends BddObject {
     }
     
     public void setNote(double note) throws Exception {
-        
         this.note = note;
     }
     
@@ -176,7 +176,7 @@ public class User extends BddObject {
         for (User user : users) {
             user.setCritereInfos();
             user.setNote(this.getNote(user));
-            if (user.getNote() >= 14 && user.getNote(this) >= 14 && !this.getIdUser().equals(user.getIdUser()) && !this.getGenre().equals(user.getGenre()))
+            if (!this.getIdUser().equals(user.getIdUser()) && !this.getGenre().equals(user.getGenre()))
                 match.add(user);
         }
         User[] results = convert(match);

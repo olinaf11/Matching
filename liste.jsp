@@ -68,6 +68,9 @@
           <td>
             <a href="insert-indisponible?idUser=<% out.print(proposition.getIdUser()); %>" class="btn btn-primary">Retirer</a>
           </td>
+          <td>
+            <% out.print(Math.floor(proposition.getNote())); %>
+          </td>
         </tr>
         <% } %>
       </table>
