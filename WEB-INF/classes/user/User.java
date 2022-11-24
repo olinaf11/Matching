@@ -158,7 +158,7 @@ public class User extends BddObject {
         for (int i = 0; i < this.criteres.length; i++) {
             Axe axe = new Axe();
             axe.setIdAxe(this.criteres[i].getIdAxe());
-            Note note = new Note(axe);
+            Note note = new Note(axe, this);
             somme += this.criteres[i].getCoefficient() * note.convertToNote(user.getInfos()[i].getValeur());
             coefficient += this.criteres[i].getCoefficient();
         }
