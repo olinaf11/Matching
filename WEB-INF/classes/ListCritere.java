@@ -10,8 +10,7 @@ public class ListCritere extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         try {
-            Axe[] axes = Axe.convert(new Axe().getData(BddObject.getPostgreSQL(), null));
-            request.setAttribute("axes", axes);
+            request.setAttribute("axes", Axe.convert(new Axe().getData(BddObject.getPostgreSQL(), null)));
             RequestDispatcher dispat = request.getRequestDispatcher("critere.jsp");
             dispat.forward(request, response);
         } catch (Exception e) {

@@ -15,8 +15,7 @@ public class Inscription extends HttpServlet {
         String password = request.getParameter("password");
         String genre = request.getParameter("genre");
         try {
-            User user = new User(name, password, genre);
-            bdd.add(user);
+            bdd.add(new User(name, password, genre));
             ServletContext context = this.getServletContext();
             context.setAttribute("bdd", bdd);
             response.sendRedirect("information.html");

@@ -68,14 +68,14 @@ public class Note extends BddObject {
         return (note > 20) ? 20 : note;
     }
 
-    public static String getIntervalle(String valeur) {
+    public static String getIntervalle(String valeur) throws Exception {
         int age = Integer.parseInt(valeur);
         int[][] intervalle = {{20, 30}, {30, 40}, {40, 50}, {50, 60}};
         for (int i = 0; i < intervalle.length; i++) {
             if (intervalle[i][0] <= age && age <= intervalle[i][1])
                 return intervalle[i][0] + "-" + intervalle[i][1];
         }
-        return "40-50";
+        throw new Exception("Intervalle not found");
     }
 
     public double getNote(String intervalle) throws Exception {

@@ -1,7 +1,6 @@
 import java.io.*;
 import java.sql.Connection;
 import java.util.List;
-
 import axe.Axe;
 import connection.BddObject;
 import info.Critere;
@@ -19,17 +18,13 @@ public class InsertCritere extends HttpServlet {
             ServletContext context = this.getServletContext();
             List<BddObject> bdd = (List<BddObject>) context.getAttribute("bdd");
             Object[] axes = new Axe().getData(BddObject.getPostgreSQL(), "idAxe");
+            User user = ((User) bdd.get(0));
             for (Object object : axes) {
                 Axe axe = (Axe) object;
                 axe.setIntervalles();
-                Critere critere = new Critere(axe.getIdAxe(), ((User) bdd.get(0)).getIdUser(), Integer.parseInt(request.getParameter(axe.getNom())));
-                if (axe.getIntervalles().length > 0) {
-                    for (Intervalle intervalle : axe.getIntervalles()) {
-                        Precision precision = new Precision(intervalle.getIdIntervalle(), request.getParameter(intervalle.getIntervalle()), ((User) bdd.get(0)).getIdUser());
-                        bdd.add(precision);
-                    }
-                }
-                bdd.add(critere);
+                bdd.add(new Critere(axe.getIdAxe(), user.getIdUser(), Integer.parseInt(request.getParameter(axe.getNom()))));
+                for (Intervalle intervalle : axe.getIntervalles())
+                    bdd.add(new Precision(intervalle.getIdIntervalle(), request.getParameter(intervalle.getIntervalle()), user.getIdUser()));
             }
             insertAll(bdd);
             response.sendRedirect("index");

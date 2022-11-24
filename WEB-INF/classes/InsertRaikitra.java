@@ -13,8 +13,7 @@ public class InsertRaikitra extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("id");
         try {
-            Raikitra raikitra = new Raikitra(user.getIdUser(), idUser, idMatch);
-            raikitra.insert(null);
+            new Raikitra(user.getIdUser(), idUser, idMatch).insert(null);
             response.sendRedirect("liste-match");
         } catch (Exception e) {
             PrintWriter out = response.getWriter();

@@ -13,8 +13,7 @@ public class InsertMatch extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("id");
         try {
-            Match match = new Match(user.getIdUser(), idUser, new Date(System.currentTimeMillis()));
-            match.insert(null);
+            new Match(user.getIdUser(), idUser, new Date(System.currentTimeMillis())).insert(null);
             response.sendRedirect("liste");
         } catch (Exception e) {
             PrintWriter out = response.getWriter();

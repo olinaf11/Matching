@@ -13,8 +13,7 @@ public class InsertIndisponible extends HttpServlet {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("id");
             try {
-                Indisponible indisponible = new Indisponible(user.getIdUser(), idUser);
-                indisponible.insert(null);
+                new Indisponible(user.getIdUser(), idUser).insert(null);
                 response.sendRedirect("liste");
             } catch (Exception e) {
                 PrintWriter out = response.getWriter();

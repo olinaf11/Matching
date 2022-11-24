@@ -15,11 +15,9 @@ public class Liste extends HttpServlet {
         User user = (User) session.getAttribute("id");
         boolean check = (request.getParameter("check") != null) ? Boolean.parseBoolean(request.getParameter("check")) : true;
         try {
-            User[] proposition = user.getProposition(check);
-            request.setAttribute("proposition", proposition);
+            request.setAttribute("proposition", user.getProposition(check));
             request.setAttribute("user", user);
-            Axe[] axes = Axe.convert(new Axe().getData(BddObject.getPostgreSQL(), "idAxe"));
-            request.setAttribute("axe", axes);
+            request.setAttribute("axe", Axe.convert(new Axe().getData(BddObject.getPostgreSQL(), "idAxe")));
             RequestDispatcher dispat = request.getRequestDispatcher("liste.jsp");
             dispat.forward(request, response);
         } catch (InvocationTargetException e) {

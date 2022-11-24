@@ -15,8 +15,7 @@ public class ListMatch extends HttpServlet {
         try {
             Match match = new Match();
             match.setIdUserMatch(user.getIdUser());
-            Match[] matchs = Match.convert(match.getData(BddObject.getPostgreSQL(), null, "idUserMatch"));
-            request.setAttribute("matchs", matchs);
+            request.setAttribute("matchs", Match.convert(match.getData(BddObject.getPostgreSQL(), null, "idUserMatch")));
             request.setAttribute("user", user);
             RequestDispatcher dispat = request.getRequestDispatcher("listeMatch.jsp");
             dispat.forward(request, response);

@@ -25,19 +25,17 @@
                 <label for="<% out.print(axe.getNom()); %>" class="form-label"><% out.print(axe.getNom()); %></label>
                 <input type="text" class="form-control" name="<% out.print(axe.getNom()); %>" id="<% out.print(axe.getNom()); %>" placeholder="/10">
             </div>
-                <% if (axe.getIntervalles().length > 0) {
-                    for (Intervalle precision : axe.getIntervalles()) { %>
-                        <div class="row ms-4 mt-3">
-                            <% out.print(precision.getIntervalle()); %>
-                            <select class="form-select mt-2" aria-label="Default select example" id="nationalite" name="<% out.print(precision.getIntervalle()); %>">
-                                <option value="Souhaite">Souhaite</option>
-                                <option value="Moyen">Moyen</option>
-                                <option value="Passable">Passable</option>
-                                <option value="Mauvais">Mauvais</option>
-                            </select>
-                        </div>
-                    <% }
-                }         
+                <% for (Intervalle precision : axe.getIntervalles()) { %>
+                    <div class="row ms-4 mt-3">
+                        <% out.print(precision.getIntervalle()); %>
+                        <select class="form-select mt-2" aria-label="Default select example" id="nationalite" name="<% out.print(precision.getIntervalle()); %>">
+                            <option value="Souhaite">Souhaite</option>
+                            <option value="Moyen">Moyen</option>
+                            <option value="Passable">Passable</option>
+                            <option value="Mauvais">Mauvais</option>
+                        </select>
+                    </div>
+                <% }    
             } %>
             <div class="row mt-4">
                 <input type="submit" value="OK" class="btn btn-primary mt-3">
